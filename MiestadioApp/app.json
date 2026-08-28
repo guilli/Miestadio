@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "MiestadioApp",
+    "slug": "donde-esta-el-campo",
+    "plugins": [
+      "expo-av"
+    ],
+    "android": {
+      "package": "com.guillipandi.dondeestaelcampo",
+      "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e3a24255-eb8e-48d1-80d4-c66921916545"
+      }
+    },
+    "owner": "guillipandis-team"
+  }
+}
