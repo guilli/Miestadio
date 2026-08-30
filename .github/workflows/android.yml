@@ -23,6 +23,10 @@ jobs:
         working-directory: MiestadioApp
         run: npm install
 
+      - name: Expo Prebuild
+        working-directory: MiestadioApp
+        run: npx expo prebuild --platform android --no-install
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
