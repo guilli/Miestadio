@@ -76,28 +76,27 @@ const HomeScreen: React.FC = () => {
 
   // Suscripción al magnetómetro para obtener el heading del dispositivo
   useEffect(() => {
-    let subscription: any = null;
-
     // Low-pass filter para suavizar la lectura del sensor
     let smoothX = 0;
     let smoothY = 0;
     const ALPHA = 0.15;
 
-    const startMagnetometer = () => {
+    let subscription: { remove: () => void } | null = null;
+
+    const startMagnetometer = async () => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const { magnetometer, setUpdateIntervalForType, SensorTypes } = require('react-native-sensors');
+        const { Magnetometer } = require('expo-sensors');
 
-        try { setUpdateIntervalForType(SensorTypes.magnetometer, 16); } catch { /* ignorar */ }
+        try { Magnetometer.setUpdateInterval(16); } catch { /* ignorar */ }
 
-        subscription = magnetometer.subscribe(
-          ({ x, y }: { x: number; y: number; z: number }) => {
+        subscription = Magnetometer.addListener(
+          ({ x, y }: { x: number; y: number }) => {
             smoothX = ALPHA * x + (1 - ALPHA) * smoothX;
             smoothY = ALPHA * y + (1 - ALPHA) * smoothY;
             const angle = Math.atan2(smoothX, smoothY) * (180 / Math.PI);
             setDeviceHeading((angle + 360) % 360);
           },
-          () => { /* ignorar errores del sensor */ },
         );
       } catch {
         // Sensor no disponible en simulador
@@ -105,7 +104,7 @@ const HomeScreen: React.FC = () => {
     };
 
     startMagnetometer();
-    return () => subscription?.unsubscribe?.();
+    return () => subscription?.remove();
   }, []);
 
   return (

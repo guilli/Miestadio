@@ -4,6 +4,7 @@
     "slug": "donde-esta-el-campo",
     "plugins": [
       "expo-av",
+      "expo-sensors",
       [
         "expo-location",
         {
