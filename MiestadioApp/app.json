@@ -3,7 +3,13 @@
     "name": "MiestadioApp",
     "slug": "donde-esta-el-campo",
     "plugins": [
-      "expo-av"
+      "expo-av",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "MiEstadio necesita acceder a tu ubicación para localizar estadios cercanos."
+        }
+      ]
     ],
     "android": {
       "package": "com.guillipandi.dondeestaelcampo",
