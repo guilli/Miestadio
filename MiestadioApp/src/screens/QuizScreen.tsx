@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -57,53 +57,10 @@ function buildQuestions(division: 'Primera' | 'Segunda' | 'Ambas'): Question[] {
 type GameState = 'config' | 'playing' | 'finished';
 type DivisionFilter = 'Primera' | 'Segunda' | 'Ambas';
 
-// ── Hook de sonido "bajo el agua" ────────────────────────────────────────
+// ── Hook de sonido (sin implementación nativa) ───────────────────────────
 function useUnderwaterSound() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const soundRef = useRef<any>(null);
-
-  useEffect(() => {
-    let mounted = true;
-
-    const load = async () => {
-      try {
-        // Import dinámico para que falle de forma silenciosa si el módulo
-        // nativo aún no está compilado en el build instalado en el dispositivo
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { Audio } = require('expo-av');
-        await Audio.setAudioModeAsync({
-          playsInSilentModeIOS: true,
-          shouldDuckAndroid: true,
-        });
-        const { sound } = await Audio.Sound.createAsync(
-          // eslint-disable-next-line @typescript-eslint/no-require-imports
-          require('../assets/sounds/underwater_pop.wav'),
-          { volume: 1.0, rate: 0.6, shouldCorrectPitch: false }, // rate<1 = más grave/amortiguado
-        );
-        if (mounted) soundRef.current = sound;
-      } catch (_e) {
-        // Si el audio falla (módulo nativo no disponible o error de carga)
-        // no rompemos la app
-      }
-    };
-
-    load();
-
-    return () => {
-      mounted = false;
-      soundRef.current?.unloadAsync().catch(() => {/* ignorar */});
-    };
-  }, []);
-
   const play = useCallback(async () => {
-    try {
-      const s = soundRef.current;
-      if (!s) return;
-      await s.setPositionAsync(0);
-      await s.playAsync();
-    } catch (_) {
-      // Silencio en caso de error
-    }
+    // Sonido eliminado: expo-av removido del proyecto
   }, []);
 
   return { play };

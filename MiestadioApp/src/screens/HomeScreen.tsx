@@ -81,30 +81,32 @@ const HomeScreen: React.FC = () => {
     let smoothY = 0;
     const ALPHA = 0.15;
 
-    let subscription: { remove: () => void } | null = null;
+    let subscription: { unsubscribe: () => void } | null = null;
 
     const startMagnetometer = async () => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const { Magnetometer } = require('expo-sensors');
+        const { magnetometer } = require('react-native-sensors');
 
-        try { Magnetometer.setUpdateInterval(16); } catch { /* ignorar */ }
-
-        subscription = Magnetometer.addListener(
+        subscription = magnetometer.subscribe(
           ({ x, y }: { x: number; y: number }) => {
             smoothX = ALPHA * x + (1 - ALPHA) * smoothX;
             smoothY = ALPHA * y + (1 - ALPHA) * smoothY;
             const angle = Math.atan2(smoothX, smoothY) * (180 / Math.PI);
             setDeviceHeading((angle + 360) % 360);
           },
+          (error: unknown) => {
+            console.log('Magnetometer error:', error);
+          },
         );
-      } catch {
-        // Sensor no disponible en simulador
+      } catch (err) {
+        // Sensor no disponible en simulador o módulo no enlazado
+        console.log('Magnetometer not available:', err);
       }
     };
 
     startMagnetometer();
-    return () => subscription?.remove();
+    return () => subscription?.unsubscribe();
   }, []);
 
   return (

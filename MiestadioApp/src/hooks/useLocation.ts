@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import * as Location from 'expo-location';
+import { Platform, PermissionsAndroid } from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
 import { LocationCoords, Stadium, StadiumWithDistance } from '../types';
 
 // ─── Haversine formula ────────────────────────────────────────────────────────
@@ -48,6 +49,21 @@ function toDeg(rad: number): number {
   return (rad * 180) / Math.PI;
 }
 
+// ─── Pedir permiso en Android ─────────────────────────────────────────────────
+async function requestAndroidPermission(): Promise<boolean> {
+  if (Platform.OS !== 'android') return true;
+  const granted = await PermissionsAndroid.request(
+    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    {
+      title: 'Permiso de ubicación',
+      message: 'MiEstadio necesita acceder a tu ubicación para localizar estadios cercanos.',
+      buttonPositive: 'Aceptar',
+      buttonNegative: 'Cancelar',
+    },
+  );
+  return granted === PermissionsAndroid.RESULTS.GRANTED;
+}
+
 // ─── Hook ─────────────────────────────────────────────────────────────────────
 interface UseLocationResult {
   userLocation: LocationCoords | null;
@@ -65,25 +81,31 @@ const useLocation = (): UseLocationResult => {
 
   const fetchLocation = useCallback(async () => {
     try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-
-      if (status !== 'granted') {
-        setLocationError('Permiso de ubicación denegado. Actívalo en Ajustes.');
-        return;
+      if (Platform.OS === 'android') {
+        const granted = await requestAndroidPermission();
+        if (!granted) {
+          setLocationError('Permiso de ubicación denegado. Actívalo en Ajustes.');
+          return;
+        }
       }
 
-      const position = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-      });
-
-      setUserLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      });
-
-      setLocationError(null);
-    } catch (err) {
-      console.log('GPS Error:', err);
+      Geolocation.getCurrentPosition(
+        position => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+          setLocationError(null);
+        },
+        error => {
+          console.log('GPS Error code:', error?.code, 'message:', error?.message);
+          setLocationError('No se pudo obtener la ubicación. Comprueba el GPS.');
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+      );
+    } catch (err: unknown) {
+      const e = err as { code?: number; message?: string };
+      console.log('GPS Error code:', e?.code, 'message:', e?.message ?? String(err));
       setLocationError('No se pudo obtener la ubicación. Comprueba el GPS.');
     }
   }, []);
