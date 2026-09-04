@@ -43,7 +43,7 @@ export default function InfoScreen() {
           <Text style={styles.infoBoxText}>MyStadium incluye los estadios de los 20 equipos de Primera División y los 19 de Segunda División de la temporada 2025-26 del fútbol español.</Text>
         </View>
 
-        <Text style={styles.sectionTitle}>Desarrolladores</Text>
+        <Text style={styles.sectionTitle}>Partners</Text>
         <View style={styles.infoBox}>
           <Text style={styles.infoBoxText}>Xavi Solé · Guillem Polinyà</Text>
         </View>
