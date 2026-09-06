@@ -81,8 +81,7 @@ export default function HomeScreen() {
       {stadium === null ? (
         <View style={styles.empty}>
           <Text style={styles.emptyIcon}>🧭</Text>
-          <Text style={styles.emptyText}>Selecciona una liga y un equipo{'
-'}para ver la brújula y los datos del estadio</Text>
+            <Text style={styles.emptyText}>Selecciona una liga y un equipo{"\n"}para ver la brújula y los datos del estadio</Text>
         </View>
       ) : (
         <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 32 }]} showsVerticalScrollIndicator={false}>
