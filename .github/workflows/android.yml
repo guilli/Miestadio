@@ -19,10 +19,10 @@ jobs:
         with:
           node-version: 22
           cache: 'npm'
-          cache-dependency-path: MyStadium/package-lock.json
+          cache-dependency-path: MyStadium/MyStadium/package-lock.json
 
       - name: Instalar dependencias JS
-        working-directory: MyStadium
+        working-directory: MyStadium/MyStadium
         run: npm ci --legacy-peer-deps
 
       - name: Configurar Java 17
@@ -40,21 +40,21 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('MyStadium/android/gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-${{ runner.os }}-${{ hashFiles('MyStadium/MyStadium/android/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
             gradle-${{ runner.os }}-
 
       - name: Dar permisos a gradlew
-        working-directory: MyStadium/android
+        working-directory: MyStadium/MyStadium/android
         run: chmod +x gradlew
 
       - name: Compilar APK debug
-        working-directory: MyStadium/android
+        working-directory: MyStadium/MyStadium/android
         run: ./gradlew assembleDebug --no-daemon
 
       - name: Subir APK como artefacto
         uses: actions/upload-artifact@v4
         with:
           name: MyStadium-debug-APK
-          path: MyStadium/android/app/build/outputs/apk/debug/app-debug.apk
+          path: MyStadium/MyStadium/android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
