@@ -43,8 +43,8 @@ export default function HomeScreen() {
         <Text style={styles.headerSub}>Campos de fútbol · España</Text>
       </View>
 
-      <View style={styles.selectors}>
-        <View style={styles.pickerWrap}>
+      <View style={styles.selectorsRow}>
+        <View style={styles.pickerWrapRow}>
           <Text style={styles.pickerLabel}>Liga</Text>
           <View style={styles.pickerBox}>
             <Picker selectedValue={leagueId} onValueChange={v => setLeagueId(v as LeagueId)} style={styles.picker} dropdownIconColor="#2E7D32">
@@ -52,7 +52,8 @@ export default function HomeScreen() {
             </Picker>
           </View>
         </View>
-        <View style={styles.pickerWrap}>
+
+        <View style={[styles.pickerWrapRow, styles.pickerRight]}>
           <Text style={styles.pickerLabel}>Equipo</Text>
           <View style={styles.pickerBox}>
             <Picker selectedValue={teamId} onValueChange={v => setTeamId(v as string)} style={styles.picker} dropdownIconColor="#2E7D32" mode="dropdown">
@@ -80,7 +81,8 @@ export default function HomeScreen() {
       {stadium === null ? (
         <View style={styles.empty}>
           <Text style={styles.emptyIcon}>🧭</Text>
-          <Text style={styles.emptyText}>Selecciona una liga y un equipo{'\n'}para ver la brújula y los datos del estadio</Text>
+          <Text style={styles.emptyText}>Selecciona una liga y un equipo{'
+'}para ver la brújula y los datos del estadio</Text>
         </View>
       ) : (
         <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 32 }]} showsVerticalScrollIndicator={false}>
@@ -131,15 +133,17 @@ const styles = StyleSheet.create({
   header: { backgroundColor: '#1B5E20', paddingHorizontal: 20, paddingVertical: 14 },
   headerTitle: { fontSize: 24, fontWeight: '900', color: '#fff', letterSpacing: 0.5 },
   headerSub: { fontSize: 12, color: '#A5D6A7', marginTop: 2 },
-  selectors: { backgroundColor: '#fff', paddingHorizontal: 12, paddingTop: 10, paddingBottom: Platform.OS === 'ios' ? 8 : 4, borderBottomWidth: 1, borderBottomColor: '#E0E0E0', gap: 6 },
+  selectorsRow: { backgroundColor: '#fff', paddingHorizontal: 12, paddingTop: 10, paddingBottom: Platform.OS === 'ios' ? 8 : 4, borderBottomWidth: 1, borderBottomColor: '#E0E0E0', flexDirection: 'row', alignItems: 'center' },
+  pickerWrapRow: { flex: 1, marginRight: 8 },
+  pickerRight: { marginRight: 0 },
   pickerWrap: {},
-  pickerLabel: { fontSize: 11, color: '#777', fontWeight: '700', marginLeft: 4, marginBottom: 2, textTransform: 'uppercase', letterSpacing: 0.3 },
+  pickerLabel: { fontSize: 11, color: '#777', fontWeight: '700', marginLeft: 4, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.3 },
   pickerBox: { borderWidth: 1.5, borderColor: '#C8E6C9', borderRadius: 10, backgroundColor: '#F1F8E9', overflow: 'hidden' },
-  picker: { height: 48, color: '#1B5E20' },
+  picker: { height: 48, color: '#1B5E20', width: '100%' },
   errorBanner: { backgroundColor: '#FFF3E0', borderLeftWidth: 4, borderLeftColor: '#FF6F00', padding: 12, margin: 12, borderRadius: 8 },
   errorText: { color: '#E65100', fontSize: 13 },
   errorRetry: { color: '#F57C00', fontSize: 12, marginTop: 2, textDecorationLine: 'underline' },
-  loadingRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#E8F5E9', paddingHorizontal: 16, paddingVertical: 8, gap: 8, borderBottomWidth: 1, borderBottomColor: '#C8E6C9' },
+  loadingRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#E8F5E9', paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#C8E6C9' },
   loadingText: { color: '#555', fontSize: 14 },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40 },
   emptyIcon: { fontSize: 64, marginBottom: 16 },
