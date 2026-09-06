@@ -103,7 +103,7 @@ export default function QuizScreen() {
     return (
       <View style={[styles.screen, { paddingTop: insets.top }]}>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.exitBtn} onPress={() => Alert.alert('Abandonar', '¿Seguro? Se perderá el progreso.', [{ text: 'Cancelar', style: 'cancel' }, { text: 'Salir', style: 'destructive', onPress: () => setGameState('config') }])}>
+          <TouchableOpacity style={styles.exitBtn} onPress={() => Alert.alert('Abandonar', '¿Seguro? Se perderá el progreso.', [{ text: 'Cancelar', style: 'cancel' }, { text: 'Salir', style: 'd[...]}]}>
             <Text style={styles.exitTxt}>✕</Text>
           </TouchableOpacity>
           <Text style={styles.headerTitle}>🧠 Quiz</Text>
@@ -120,7 +120,7 @@ export default function QuizScreen() {
           <View style={[styles.answerBox, { borderColor: pickerBorderColor }]}>
             <Text style={styles.answerBoxLabel}>Tu respuesta</Text>
             <View style={styles.answerPickerWrap}>
-              <Picker selectedValue={selected} onValueChange={v => !answered && setSelected(v as string)} style={styles.answerPicker} enabled={!answered} dropdownIconColor="#2E7D32" mode="dropdown">
+              <Picker selectedValue={selected} onValueChange={v => !answered && setSelected(v as string)} style={styles.answerPicker} enabled={!answered} dropdownIconColor="#2E7D32" mode="dropdow[...]}>
                 <Picker.Item label="— Selecciona el equipo —" value="__none__" color="#999" />
                 {current.options.map(opt => <Picker.Item key={opt} label={opt} value={opt} />)}
               </Picker>
@@ -155,6 +155,13 @@ export default function QuizScreen() {
       <ScrollView contentContainerStyle={[styles.resultsContent, { paddingBottom: insets.bottom + 32 }]}>
         <Text style={styles.rEmoji}>{rEmoji}</Text>
         <Text style={styles.rMsg}>{rMsg}</Text>
+
+        <View style={styles.topActions}>
+          <TouchableOpacity style={styles.shareBtnSmall} onPress={share}><Text style={styles.shareBtnTxt}>📲 Compartir</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.retryBtnSmall} onPress={start}><Text style={styles.retryBtnTxt}>🔄 Volver a jugar</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.configBtnSmall} onPress={() => setGameState('config')}><Text style={styles.configBtnTxt}>⚙️ Categoría</Text></TouchableOpacity>
+        </View>
+
         <Text style={styles.rScore}>{score} / {TOTAL}</Text>
         <Text style={styles.rPct}>{pct}% de aciertos</Text>
         {wrongs.length > 0 && (
@@ -234,4 +241,11 @@ const styles = StyleSheet.create({
   retryBtnTxt: { color: '#fff', fontSize: 16, fontWeight: '700' },
   configBtn: { borderRadius: 28, paddingVertical: 14, paddingHorizontal: 32, borderWidth: 1.5, borderColor: '#2E7D32', width: '100%', alignItems: 'center' },
   configBtnTxt: { color: '#2E7D32', fontSize: 15, fontWeight: '600' },
+
+  /* new styles */
+  topActions: { flexDirection: 'row', width: '100%', justifyContent: 'space-around', marginVertical: 12 },
+  shareBtnSmall: { backgroundColor: '#25D366', borderRadius: 20, paddingVertical: 8, paddingHorizontal: 14, alignItems: 'center' },
+  retryBtnSmall: { backgroundColor: '#1B5E20', borderRadius: 20, paddingVertical: 8, paddingHorizontal: 14, alignItems: 'center' },
+  configBtnSmall: { borderRadius: 20, paddingVertical: 8, paddingHorizontal: 14, borderWidth: 1.5, borderColor: '#2E7D32' },
+  shareBtnTxtSmall: { color: '#fff', fontSize: 14, fontWeight: '700' },
 });
