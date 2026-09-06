@@ -48,6 +48,13 @@ jobs:
         working-directory: MyStadium/android
         run: chmod +x gradlew
 
+      - name: Debug React Native CLI
+        run: |
+          pwd
+          find . -name package.json | sort
+          cat react-native.config.js
+          npx @react-native-community/cli config || true
+
       - name: Compilar APK debug
         working-directory: MyStadium/android
         run: ./gradlew assembleRelease --no-daemon --stacktrace --info
