@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Platform, PermissionsAndroid } from 'react-native';
-import Geolocation from '@react-native-community/geolocation';
-import { LocationCoords, Stadium, StadiumWithDistance } from '../types';
+import { useState, useEffect, useCallback } from "react";
+import { Platform, PermissionsAndroid } from "react-native";
+import Geolocation from "@react-native-community/geolocation";
+import { LocationCoords, Stadium, StadiumWithDistance } from "../types";
 
 function toRad(deg: number): number { return (deg * Math.PI) / 180; }
 function toDeg(rad: number): number { return (rad * 180) / Math.PI; }
@@ -26,14 +26,14 @@ function calculateBearing(from: LocationCoords, to: LocationCoords): number {
 }
 
 async function requestAndroidPermission(): Promise<boolean> {
-  if (Platform.OS !== 'android') { return true; }
+  if (Platform.OS !== "android") { return true; }
   const granted = await PermissionsAndroid.request(
     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
     {
-      title: 'Permiso de ubicación',
-      message: 'MyStadium necesita tu ubicación para localizar estadios.',
-      buttonPositive: 'Aceptar',
-      buttonNegative: 'Cancelar',
+      title: "Permiso de ubicación",
+      message: "MyStadium necesita tu ubicación para localizar estadios.",
+      buttonPositive: "Aceptar",
+      buttonNegative: "Cancelar",
     },
   );
   return granted === PermissionsAndroid.RESULTS.GRANTED;
@@ -52,9 +52,9 @@ export default function useLocation(): UseLocationResult {
 
   const fetchLocation = useCallback(async () => {
     try {
-      if (Platform.OS === 'android') {
+      if (Platform.OS === "android") {
         const ok = await requestAndroidPermission();
-        if (!ok) { setLocationError('Permiso de ubicación denegado. Actívalo en Ajustes.'); return; }
+        if (!ok) { setLocationError("Permiso de ubicación denegado. Actívalo en Ajustes."); return; }
       }
       Geolocation.getCurrentPosition(
         pos => {
@@ -67,14 +67,14 @@ export default function useLocation(): UseLocationResult {
               setUserLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
               setLocationError(null);
             },
-            () => setLocationError('No se pudo obtener la ubicación. Comprueba el GPS.'),
+            () => setLocationError("No se pudo obtener la ubicación. Comprueba el GPS."),
             { enableHighAccuracy: false, timeout: 20000, maximumAge: 30000 },
           );
         },
         { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
       );
     } catch {
-      setLocationError('No se pudo obtener la ubicación.');
+      setLocationError("No se pudo obtener la ubicación.");
     }
   }, []);
 

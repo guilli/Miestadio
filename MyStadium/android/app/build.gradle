@@ -1,3 +1,5 @@
+apply plugin: 'com.android.application'
+
 // Added signing config template and instructions
 // You must add your keystore file to android/app/ and set the passwords in android/gradle.properties or ~/.gradle/gradle.properties
 // Example properties to add to gradle.properties:
@@ -7,6 +9,8 @@
 // MYAPP_RELEASE_KEY_PASSWORD=your_key_password
 
 android {
+ compileSdk 33
+ namespace "com.mystadium"
   signingConfigs {
     release {
       if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
@@ -22,7 +26,7 @@ android {
     release {
       signingConfig signingConfigs.release
       minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
   }
 }

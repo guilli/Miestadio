@@ -1,4 +1,4 @@
-export type Division = 'Primera' | 'Segunda';
+export type Division = "Primera" | "Segunda";
 
 export interface LocationCoords {
   latitude: number;

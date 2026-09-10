@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { DeviceEventEmitter, NativeModules, Platform } from 'react-native';
+import { useState, useEffect } from "react";
+import { DeviceEventEmitter, NativeModules, Platform } from "react-native";
 
 /**
  * Devuelve el heading del dispositivo en grados (0 = norte magnético).
@@ -11,7 +11,7 @@ export default function useMagnetometer(): number {
   const [heading, setHeading] = useState(0);
 
   useEffect(() => {
-    if (Platform.OS !== 'android') { return; }
+    if (Platform.OS !== "android") { return; }
 
     const RNSensors = NativeModules.RNSensors;
     if (!RNSensors) { return; }
@@ -21,10 +21,10 @@ export default function useMagnetometer(): number {
     const ALPHA = 0.15;
 
     try {
-      RNSensors.startUpdates('magnetometer', 100);
+      RNSensors.startUpdates("magnetometer", 100);
     } catch { return; }
 
-    const sub = DeviceEventEmitter.addListener('Magnetometer', (data: { x: number; y: number }) => {
+    const sub = DeviceEventEmitter.addListener("Magnetometer", (data: { x: number; y: number }) => {
       smoothX = ALPHA * data.x + (1 - ALPHA) * smoothX;
       smoothY = ALPHA * data.y + (1 - ALPHA) * smoothY;
       const angle = Math.atan2(smoothX, smoothY) * (180 / Math.PI);
@@ -33,7 +33,7 @@ export default function useMagnetometer(): number {
 
     return () => {
       sub.remove();
-      try { RNSensors.stopUpdates('magnetometer'); } catch { /* noop */ }
+      try { RNSensors.stopUpdates("magnetometer"); } catch { /* noop */ }
     };
   }, []);
 
