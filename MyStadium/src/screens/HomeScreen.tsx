@@ -1,26 +1,26 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { stadiums as allStadiums } from '../data/stadiums';
-import { Division, StadiumWithDistance } from '../types';
-import useLocation from '../hooks/useLocation';
-import useMagnetometer from '../hooks/useMagnetometer';
-import Compass from '../components/Compass';
+import React, { useState, useMemo, useEffect } from "react";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { stadiums as allStadiums } from "../data/stadiums";
+import { Division, StadiumWithDistance } from "../types";
+import useLocation from "../hooks/useLocation";
+import useMagnetometer from "../hooks/useMagnetometer";
+import Compass from "../components/Compass";
 
-type LeagueId = 'primera' | 'segunda';
+type LeagueId = "primera" | "segunda";
 const LEAGUES: { id: LeagueId; label: string; division: Division }[] = [
-  { id: 'primera', label: '🥇 Primera División', division: 'Primera' },
-  { id: 'segunda', label: '🥈 Segunda División', division: 'Segunda' },
+  { id: "primera", label: "🥇 Primera División", division: "Primera" },
+  { id: "segunda", label: "🥈 Segunda División", division: "Segunda" },
 ];
-const PLACEHOLDER = '__none__';
+const PLACEHOLDER = "__none__";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const { userLocation, locationError, enrichStadiums, refreshLocation } = useLocation();
   const heading = useMagnetometer();
 
-  const [leagueId, setLeagueId] = useState<LeagueId>('primera');
+  const [leagueId, setLeagueId] = useState<LeagueId>("primera");
   const [teamId, setTeamId] = useState<string>(PLACEHOLDER);
   const league = useMemo(() => LEAGUES.find(l => l.id === leagueId)!, [leagueId]);
 
@@ -81,8 +81,7 @@ export default function HomeScreen() {
       {stadium === null ? (
         <View style={styles.empty}>
           <Text style={styles.emptyIcon}>🧭</Text>
-            <Text style={styles.emptyText}>Selecciona una liga y un equipo{"\n"}para ver la brújula y los datos del estadio</Text>
-        </View>
+          <Text style={styles.emptyText}>Selecciona una liga y un equipo{"\n"}para ver la brújula y los datos del estadio</Text>
       ) : (
         <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 32 }]} showsVerticalScrollIndicator={false}>
           <View style={styles.compassSection}>
@@ -94,8 +93,8 @@ export default function HomeScreen() {
             <Text style={styles.cardTeam}>{stadium.teamName}</Text>
             <View style={styles.divider} />
             <Row icon="📍" label="Ciudad" value={stadium.city} />
-            <Row icon="🏆" label="Liga" value={stadium.division === 'Primera' ? 'Primera División' : 'Segunda División'} />
-            <Row icon="👥" label="Aforo" value={stadium.capacity.toLocaleString('es-ES') + ' espectadores'} />
+            <Row icon="🏆" label="Liga" value={stadium.division === "Primera" ? "Primera División" : "Segunda División"} />
+            <Row icon="👥" label="Aforo" value={stadium.capacity.toLocaleString("es-ES") + " espectadores"} />
             <Row icon="📅" label="Año" value={`Inaugurado en ${stadium.yearBuilt}`} />
             {stadium.distance != null && (
               <Row icon="📏" label="Distancia" value={stadium.distance < 1 ? `${Math.round(stadium.distance * 1000)} m desde tu posición` : `${stadium.distance.toFixed(1)} km desde tu posición`} />
@@ -120,38 +119,38 @@ function Row({ icon, label, value }: { icon: string; label: string; value: strin
 }
 
 const rowStyles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', paddingVertical: 8 },
+  row: { flexDirection: "row", alignItems: "center", paddingVertical: 8 },
   icon: { fontSize: 20, width: 32 },
   texts: { flex: 1 },
-  label: { fontSize: 10, color: '#999', fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.5 },
-  value: { fontSize: 15, color: '#1A1A2E', fontWeight: '600', marginTop: 1 },
+  label: { fontSize: 10, color: "#999", fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
+  value: { fontSize: 15, color: "#1A1A2E", fontWeight: "600", marginTop: 1 },
 });
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#F0F4F0' },
-  header: { backgroundColor: '#1B5E20', paddingHorizontal: 20, paddingVertical: 14 },
-  headerTitle: { fontSize: 24, fontWeight: '900', color: '#fff', letterSpacing: 0.5 },
-  headerSub: { fontSize: 12, color: '#A5D6A7', marginTop: 2 },
-  selectorsRow: { backgroundColor: '#fff', paddingHorizontal: 12, paddingTop: 10, paddingBottom: Platform.OS === 'ios' ? 8 : 4, borderBottomWidth: 1, borderBottomColor: '#E0E0E0', flexDirection: 'row', alignItems: 'center' },
+  screen: { flex: 1, backgroundColor: "#F0F4F0" },
+  header: { backgroundColor: "#1B5E20", paddingHorizontal: 20, paddingVertical: 14 },
+  headerTitle: { fontSize: 24, fontWeight: "900", color: "#fff", letterSpacing: 0.5 },
+  headerSub: { fontSize: 12, color: "#A5D6A7", marginTop: 2 },
+  selectorsRow: { backgroundColor: "#fff", paddingHorizontal: 12, paddingTop: 10, paddingBottom: Platform.OS === "ios" ? 8 : 4, borderBottomWidth: 1, borderBottomColor: "#E0E0E0", flexDirection: "row", alignItems: "center" },
   pickerWrapRow: { flex: 1, marginRight: 8 },
   pickerRight: { marginRight: 0 },
   pickerWrap: {},
-  pickerLabel: { fontSize: 11, color: '#777', fontWeight: '700', marginLeft: 4, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.3 },
-  pickerBox: { borderWidth: 1.5, borderColor: '#C8E6C9', borderRadius: 10, backgroundColor: '#F1F8E9', overflow: 'hidden' },
-  picker: { height: 48, color: '#1B5E20', width: '100%' },
-  errorBanner: { backgroundColor: '#FFF3E0', borderLeftWidth: 4, borderLeftColor: '#FF6F00', padding: 12, margin: 12, borderRadius: 8 },
-  errorText: { color: '#E65100', fontSize: 13 },
-  errorRetry: { color: '#F57C00', fontSize: 12, marginTop: 2, textDecorationLine: 'underline' },
-  loadingRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#E8F5E9', paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#C8E6C9' },
-  loadingText: { color: '#555', fontSize: 14 },
-  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40 },
+  pickerLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.3 },
+  pickerBox: { borderWidth: 1.5, borderColor: "#C8E6C9", borderRadius: 10, backgroundColor: "#F1F8E9", overflow: "hidden" },
+  picker: { height: 48, color: "#1B5E20", width: "100%" },
+  errorBanner: { backgroundColor: "#FFF3E0", borderLeftWidth: 4, borderLeftColor: "#FF6F00", padding: 12, margin: 12, borderRadius: 8 },
+  errorText: { color: "#E65100", fontSize: 13 },
+  errorRetry: { color: "#F57C00", fontSize: 12, marginTop: 2, textDecorationLine: "underline" },
+  loadingRow: { flexDirection: "row", alignItems: "center", backgroundColor: "#E8F5E9", paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: "#C8E6C9" },
+  loadingText: { color: "#555", fontSize: 14 },
+  empty: { flex: 1, alignItems: "center", justifyContent: "center", paddingHorizontal: 40 },
   emptyIcon: { fontSize: 64, marginBottom: 16 },
-  emptyText: { fontSize: 15, color: '#888', textAlign: 'center', lineHeight: 24 },
+  emptyText: { fontSize: 15, color: "#888", textAlign: "center", lineHeight: 24 },
   scroll: { paddingTop: 0 },
-  compassSection: { backgroundColor: '#fff', alignItems: 'center', paddingVertical: 24, borderBottomWidth: 2, borderBottomColor: '#C9A84C' },
-  sectionTitle: { fontSize: 11, fontWeight: '800', color: '#1B5E20', letterSpacing: 1.5, marginBottom: 12 },
-  card: { backgroundColor: '#fff', margin: 16, borderRadius: 16, padding: 20, elevation: 4 },
-  cardStadiumName: { fontSize: 20, fontWeight: '800', color: '#1A1A2E', marginBottom: 4 },
-  cardTeam: { fontSize: 14, color: '#2E7D32', fontWeight: '600', marginBottom: 4 },
-  divider: { height: 1, backgroundColor: '#EEEEEE', marginVertical: 12 },
+  compassSection: { backgroundColor: "#fff", alignItems: "center", paddingVertical: 24, borderBottomWidth: 2, borderBottomColor: "#C9A84C" },
+  sectionTitle: { fontSize: 11, fontWeight: "800", color: "#1B5E20", letterSpacing: 1.5, marginBottom: 12 },
+  card: { backgroundColor: "#fff", margin: 16, borderRadius: 16, padding: 20, elevation: 4 },
+  cardStadiumName: { fontSize: 20, fontWeight: "800", color: "#1A1A2E", marginBottom: 4 },
+  cardTeam: { fontSize: 14, color: "#2E7D32", fontWeight: "600", marginBottom: 4 },
+  divider: { height: 1, backgroundColor: "#EEEEEE", marginVertical: 12 },
 });
