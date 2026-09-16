@@ -1,3 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+
+# 0. Si no tienes el repo clonado aún, descomenta esta línea:
+# git clone -b fix/android-build https://github.com/guilli/Miestadio.git && cd Miestadio
+
+# Si ya lo tienes clonado, entra a la carpeta y asegúrate de estar en la rama correcta
+cd Miestadio  # ajusta la ruta si tu carpeta se llama distinto
+git checkout fix/android-build
+git pull
+
+# 1. Sobrescribe el build.gradle de app/ con la versión corregida
+cat > MyStadium/android/app/build.gradle << 'EOF'
 apply plugin: 'com.android.application'
 
 // Added signing config template and instructions
@@ -9,8 +22,17 @@ apply plugin: 'com.android.application'
 // MYAPP_RELEASE_KEY_PASSWORD=your_key_password
 
 android {
- compileSdk 33
- namespace "com.mystadium"
+  compileSdk rootProject.ext.compileSdkVersion
+  namespace "com.mystadium"
+
+  defaultConfig {
+    applicationId "com.mystadium"
+    minSdkVersion rootProject.ext.minSdkVersion
+    targetSdkVersion rootProject.ext.targetSdkVersion
+    versionCode 1
+    versionName "1.0"
+  }
+
   signingConfigs {
     release {
       if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
@@ -30,3 +52,20 @@ android {
     }
   }
 }
+EOF
+
+# 2. Commit y push
+git add MyStadium/android/app/build.gradle
+git commit -m "fix: añade defaultConfig faltante y usa compileSdk del root"
+git push origin fix/android-build
+
+echo "✅ Push hecho. Ahora ve a GitHub Actions y espera a que termine el workflow 'Build Android APK'."
+echo "   Descarga el artefacto MyStadium-release-APK cuando acabe."
+
+# 3. (Opcional, cuando ya tengas el nuevo APK descargado) Desinstala la versión vieja e instala la nueva
+# Ajusta la ruta al APK descargado antes de ejecutar estas dos líneas:
+# adb uninstall com.mystadium || true
+# adb install -r ruta/al/nuevo/app-release.apk
+
+# 4. Para ver el log en vivo mientras abres la app en el móvil:
+# adb logcat -c && adb logcat *:E ReactNative:V ReactNativeJS:V AndroidRuntime:E
