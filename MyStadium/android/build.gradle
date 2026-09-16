@@ -19,3 +19,19 @@ buildscript {
 }
 
 apply plugin: "com.facebook.react.rootproject"
+
+subprojects {
+    tasks.withType(JavaCompile).configureEach {
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
+    }
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions.jvmTarget = project.name == "react-native-screens" ? "1.8" : "11"
+    }
+
+    configurations.configureEach {
+        resolutionStrategy.dependencySubstitution {
+            substitute module("com.facebook.react:react-native") using module("com.facebook.react:react-android:0.87.1")
+        }
+    }
+}

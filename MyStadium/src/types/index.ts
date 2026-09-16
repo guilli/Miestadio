@@ -1,4 +1,5 @@
 export type Division = "Primera" | "Segunda";
+export type Country = "España";
 
 export interface LocationCoords {
   latitude: number;

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Share } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Share, Linking } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { stadiums as allStadiums } from "../data/stadiums";
@@ -47,7 +47,7 @@ interface Wrong {
   chosen: string;
 }
 
-export default function QuizScreen(): React.JSX.Element {
+export default function QuizScreen(): React.JSX.Element | null {
   const insets = useSafeAreaInsets();
   const [gameState, setGameState] = useState<"setup" | "playing" | "finished">("setup");
   const [division, setDivision] = useState<DivFilter>("Primera");
@@ -107,8 +107,9 @@ export default function QuizScreen(): React.JSX.Element {
   }, []);
 
   const handleShare = useCallback(() => {
-    const msg = `🧠 Quiz Miestadio: ${score}/${TOTAL} correctas!\n\n${wrongs.length > 0 ? `Errores:\n${wrongs.map(w => `• ${w.stadium}: elegí "${w.chosen}", era "${w.correct}"`).join("\n")}` : "¡Perfecto! 🎉"}`;
-    Share.share({ message: msg });
+    const msg = `🧠 MyStadium: he acertado ${score}/${TOTAL} preguntas.\n\n${wrongs.length > 0 ? `Errores:\n${wrongs.map(w => `• ${w.stadium}: elegí "${w.chosen}", era "${w.correct}"`).join("\n")}` : "¡Perfecto! 🎉"}`;
+    const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(msg)}`;
+    Linking.openURL(whatsappUrl).catch(() => Share.share({ message: msg }));
   }, [score, wrongs]);
 
   if (gameState === "setup") {

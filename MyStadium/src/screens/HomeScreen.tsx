@@ -3,12 +3,16 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator
 import { Picker } from "@react-native-picker/picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { stadiums as allStadiums } from "../data/stadiums";
-import { Division, StadiumWithDistance } from "../types";
+import { Country, Division, StadiumWithDistance } from "../types";
 import useLocation from "../hooks/useLocation";
 import useMagnetometer from "../hooks/useMagnetometer";
 import Compass from "../components/Compass";
 
+type CountryId = "spain";
 type LeagueId = "primera" | "segunda";
+const COUNTRIES: { id: CountryId; label: string; country: Country }[] = [
+  { id: "spain", label: "España", country: "España" },
+];
 const LEAGUES: { id: LeagueId; label: string; division: Division }[] = [
   { id: "primera", label: "🥇 Primera División", division: "Primera" },
   { id: "segunda", label: "🥈 Segunda División", division: "Segunda" },
@@ -21,15 +25,17 @@ export default function HomeScreen() {
   const heading = useMagnetometer();
 
   const [leagueId, setLeagueId] = useState<LeagueId>("primera");
+  const [countryId, setCountryId] = useState<CountryId>("spain");
   const [teamId, setTeamId] = useState<string>(PLACEHOLDER);
   const league = useMemo(() => LEAGUES.find(l => l.id === leagueId)!, [leagueId]);
 
   const filteredStadiums = useMemo<StadiumWithDistance[]>(() => {
-    const base = allStadiums.filter(s => s.division === league.division);
+    const country = COUNTRIES.find(c => c.id === countryId)?.country;
+    const base = allStadiums.filter(s => s.country === country && s.division === league.division);
     return enrichStadiums(base).sort((a, b) => a.teamName.localeCompare(b.teamName));
-  }, [league, enrichStadiums]);
+  }, [countryId, league, enrichStadiums]);
 
-  useEffect(() => { setTeamId(PLACEHOLDER); }, [leagueId]);
+  useEffect(() => { setTeamId(PLACEHOLDER); }, [countryId, leagueId]);
 
   const stadium = useMemo<StadiumWithDistance | null>(
     () => teamId === PLACEHOLDER ? null : filteredStadiums.find(s => s.teamId === teamId) ?? null,
@@ -45,6 +51,14 @@ export default function HomeScreen() {
 
       <View style={styles.selectorsRow}>
         <View style={styles.pickerWrapRow}>
+          <Text style={styles.pickerLabel}>País</Text>
+          <View style={styles.pickerBox}>
+            <Picker selectedValue={countryId} onValueChange={v => setCountryId(v as CountryId)} style={styles.picker} dropdownIconColor="#2E7D32">
+              {COUNTRIES.map(c => <Picker.Item key={c.id} label={c.label} value={c.id} />)}
+            </Picker>
+          </View>
+        </View>
+        <View style={styles.pickerWrapRow}>
           <Text style={styles.pickerLabel}>Liga</Text>
           <View style={styles.pickerBox}>
             <Picker selectedValue={leagueId} onValueChange={v => setLeagueId(v as LeagueId)} style={styles.picker} dropdownIconColor="#2E7D32">
@@ -53,7 +67,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <View style={[styles.pickerWrapRow, styles.pickerRight]}>
+        <View style={[styles.pickerWrapRow, styles.pickerRight, styles.teamPicker]}>
           <Text style={styles.pickerLabel}>Equipo</Text>
           <View style={styles.pickerBox}>
             <Picker selectedValue={teamId} onValueChange={v => setTeamId(v as string)} style={styles.picker} dropdownIconColor="#2E7D32" mode="dropdown">
@@ -134,6 +148,7 @@ const styles = StyleSheet.create({
   headerSub: { fontSize: 12, color: "#A5D6A7", marginTop: 2 },
   selectorsRow: { backgroundColor: "#fff", paddingHorizontal: 12, paddingTop: 10, paddingBottom: Platform.OS === "ios" ? 8 : 4, borderBottomWidth: 1, borderBottomColor: "#E0E0E0", flexDirection: "row", alignItems: "center" },
   pickerWrapRow: { flex: 1, marginRight: 8 },
+    teamPicker: { flex: 1.45 },
   pickerRight: { marginRight: 0 },
   pickerWrap: {},
   pickerLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.3 },

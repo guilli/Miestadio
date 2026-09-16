@@ -46,6 +46,7 @@ export default function InfoScreen() {
         <Text style={styles.sectionTitle}>Partners</Text>
         <View style={styles.infoBox}>
           <Text style={styles.infoBoxText}>Xavi Solé · Guillem Polinyà</Text>
+        <Text style={styles.infoBoxText}>Xavier Solé (Partner) i Guillem Polinyà (Partner)</Text>
         </View>
 
         <Text style={styles.footer}>© 2025 MyStadium · Hecho con ❤️ para el fútbol</Text>
