@@ -7,7 +7,16 @@ import ReactTestRenderer from 'react-test-renderer';
 import App from '../App';
 
 test('renders correctly', async () => {
+  jest.useFakeTimers();
+
+  let renderer: ReactTestRenderer.ReactTestRenderer;
   await ReactTestRenderer.act(() => {
-    ReactTestRenderer.create(<App />);
+    renderer = ReactTestRenderer.create(<App />);
   });
+
+  ReactTestRenderer.act(() => {
+    renderer.unmount();
+  });
+
+  jest.useRealTimers();
 });
