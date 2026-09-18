@@ -40,13 +40,12 @@ export default function InfoScreen() {
 
         <Text style={styles.sectionTitle}>Estadios cubiertos</Text>
         <View style={styles.infoBox}>
-          <Text style={styles.infoBoxText}>MyStadium incluye los estadios de los 20 equipos de Primera División y los 19 de Segunda División de la temporada 2025-26 del fútbol español.</Text>
+          <Text style={styles.infoBoxText}>MyStadium incluye los estadios de los 20 equipos de Primera División y los 20 de Segunda División de la temporada 2025-26 del fútbol español.</Text>
         </View>
 
         <Text style={styles.sectionTitle}>Partners</Text>
         <View style={styles.infoBox}>
-          <Text style={styles.infoBoxText}>Xavi Solé · Guillem Polinyà</Text>
-        <Text style={styles.infoBoxText}>Xavier Solé (Partner) i Guillem Polinyà (Partner)</Text>
+          <Text style={styles.infoBoxText}>Xavier Solé (Partner) i Guillem Polinyà (Partner)</Text>
         </View>
 
         <Text style={styles.footer}>© 2025 MyStadium · Hecho con ❤️ para el fútbol</Text>

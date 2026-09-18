@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   headerSub: { fontSize: 12, color: "#A5D6A7", marginTop: 2 },
   selectorsRow: { backgroundColor: "#fff", paddingHorizontal: 12, paddingTop: 10, paddingBottom: Platform.OS === "ios" ? 8 : 4, borderBottomWidth: 1, borderBottomColor: "#E0E0E0", flexDirection: "row", alignItems: "center" },
   pickerWrapRow: { flex: 1, marginRight: 8 },
-    teamPicker: { flex: 1.45 },
+  teamPicker: { flex: 1.45 },
   pickerRight: { marginRight: 0 },
   pickerWrap: {},
   pickerLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.3 },
