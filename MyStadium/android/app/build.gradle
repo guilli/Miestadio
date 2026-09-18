@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'com.facebook.react'
 
 // Added signing config template and instructions
 // You must add your keystore file to android/app/ and set the passwords in android/gradle.properties or ~/.gradle/gradle.properties
@@ -10,8 +12,9 @@ apply plugin: 'com.android.application'
 
 android {
   compileSdk rootProject.ext.compileSdkVersion
+  buildToolsVersion rootProject.ext.buildToolsVersion
+  ndkVersion rootProject.ext.ndkVersion
   namespace "com.mystadium"
-
   defaultConfig {
     applicationId "com.mystadium"
     minSdkVersion rootProject.ext.minSdkVersion
@@ -19,7 +22,6 @@ android {
     versionCode 1
     versionName "1.0"
   }
-
   signingConfigs {
     release {
       if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
@@ -37,5 +39,17 @@ android {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
+  }
+}
+
+react {
+  autolinkLibrariesWithApp()
+}
+
+dependencies {
+  implementation("com.facebook.react:react-android")
+
+  if (hermesEnabled.toBoolean()) {
+    implementation("com.facebook.react:hermes-android")
   }
 }

@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-      "android:apk": "cd android && ./gradlew assembleRelease",
+    "android:apk": "cd android && ./gradlew assembleRelease",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@react-native-community/geolocation": "3.4.0",
@@ -18,7 +19,8 @@
     "react": "19.2.3",
     "react-native": "0.87.1",
     "react-native-safe-area-context": "5.9.1",
-    "react-native-screens": "4.27.0"
+    "react-native-screens": "4.27.0",
+    "react-native-sensors": "^7.3.6"
   },
   "devDependencies": {
     "@babel/core": "7.25.2",
@@ -35,8 +37,9 @@
     "@types/jest": "29.5.13",
     "@types/react": "19.2.0",
     "@types/react-test-renderer": "19.1.0",
-    "eslint": "8.19.0",
+    "eslint": "^8.57.0",
     "jest": "29.6.3",
+    "patch-package": "^8.0.1",
     "prettier": "2.8.8",
     "react-test-renderer": "19.2.3",
     "typescript": "5.8.3"
