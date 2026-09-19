@@ -1,7 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
 import { Platform, PermissionsAndroid } from "react-native";
-import Geolocation from "@react-native-community/geolocation";
 import { LocationCoords, Stadium, StadiumWithDistance } from "../types";
+
+interface GeolocationLike {
+  getCurrentPosition: (
+    success: (pos: { coords: { latitude: number; longitude: number } }) => void,
+    error?: () => void,
+    options?: Record<string, unknown>,
+  ) => void;
+}
+
+function loadGeolocation(): GeolocationLike | null {
+  try {
+    const mod = require("@react-native-community/geolocation") as
+      | { default?: GeolocationLike }
+      | GeolocationLike;
+    return mod && typeof mod === "object" && "default" in mod && mod.default
+      ? mod.default
+      : (mod as GeolocationLike);
+  } catch {
+    return null;
+  }
+}
 
 function toRad(deg: number): number { return (deg * Math.PI) / 180; }
 function toDeg(rad: number): number { return (rad * 180) / Math.PI; }
@@ -52,6 +72,11 @@ export default function useLocation(): UseLocationResult {
 
   const fetchLocation = useCallback(async () => {
     try {
+      const Geolocation = loadGeolocation();
+      if (!Geolocation) {
+        setLocationError("Ubicación no disponible en este dispositivo.");
+        return;
+      }
       if (Platform.OS === "android") {
         const ok = await requestAndroidPermission();
         if (!ok) { setLocationError("Permiso de ubicación denegado. Actívalo en Ajustes."); return; }
