@@ -163,6 +163,12 @@ jobs:
           grep -E "ReactNativeJS|AndroidRuntime|FATAL|mystadium|Unable to load|could not be found|Invariant" /tmp/diagnostico/logcat.txt | tail -60 || echo "(sin errores coincidentes)"
           echo "=== último tramo del log ==="
           tail -40 /tmp/diagnostico/logcat.txt
+          echo "=== verificación final: la app debe seguir viva ==="
+          if ! adb shell "ps -A | grep -q mystadium"; then
+            echo "FALLO: la app se cerró tras el arranque"
+            exit 1
+          fi
+          echo "OK: la app sigue en ejecución"
 
       - name: Subir diagnóstico como artefacto
         if: always()
