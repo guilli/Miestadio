@@ -91,10 +91,12 @@ jobs:
 
       - name: Crear y arrancar emulador
         shell: bash
-        timeout-minutes: 8
+        timeout-minutes: 10
         run: |
           AVD="test"
-          echo no | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd -n "$AVD" -k "system-images;android-34;google_apis;x86_64" --force 2>&1 | tail -3
+          # En runners de GitHub el usuario puede no tener permisos sobre /dev/kvm
+          if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm || true; fi
+          echo no | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd -n "$AVD" -k "system-images;android-34;google_apis;x86_64" --force 2>&1 | tail -5
           nohup "$ANDROID_HOME/emulator/emulator" \
             -avd "$AVD" \
             -no-window \
@@ -102,20 +104,32 @@ jobs:
             -no-snapshot \
             -no-audio \
             -no-boot-anim \
-            -accel on \
+            -no-metrics \
+            -accel auto \
             -memory 2048 \
             > /tmp/emulator.log 2>&1 &
-          echo "emulador lanzado, esperando arranque..."
-          adb wait-for-device
-          for i in $(seq 1 300); do
+          EMUPID=$!
+          echo "emulador PID=$EMUPID lanzado, esperando arranque..."
+          adb start-server || true
+          adb wait-for-device || true
+          for i in $(seq 1 420); do
             BOOT=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
             if [ "$BOOT" = "1" ]; then
               echo "BOOT COMPLETADO tras ${i}s"
               break
             fi
+            if ! kill -0 "$EMUPID" 2>/dev/null; then
+              echo "¡El emulador se ha cerrado! Log:"
+              tail -80 /tmp/emulator.log || true
+              break
+            fi
             sleep 1
           done
-          adb shell input keyevent 82
+          adb shell input keyevent 82 || true
+          echo "=== estado adb ==="
+          adb devices || true
+          echo "=== fin log emulador ==="
+          tail -30 /tmp/emulator.log || true
 
       - name: Instalar y abrir la app
         shell: bash
