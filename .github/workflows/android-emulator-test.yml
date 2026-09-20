@@ -1,13 +1,14 @@
 name: Android Emulator Test
 
 # Prueba la APK en un emulador Android en la nube y captura logcat + captura de pantalla.
-# Se lanza manualmente (workflow_dispatch) o al hacer push a main.
+# Se lanza manualmente (workflow_dispatch) o al hacer push a main / fix/android-build.
 
 on:
   workflow_dispatch:
   push:
     branches:
       - main
+      - fix/android-build
 
 jobs:
   emulator-test:
