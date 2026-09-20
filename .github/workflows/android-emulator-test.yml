@@ -95,9 +95,16 @@ jobs:
         run: |
           AVD="test"
           if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm || true; fi
+          # Ruta fija del AVD: evita el bug de runners donde HOME se
+          # sobreescribe en mitad del job y el emulador no encuentra el AVD.
+          export ANDROID_AVD_HOME="$HOME/.android/avd"
+          mkdir -p "$ANDROID_AVD_HOME"
           echo "=== accel-check ==="
           "$ANDROID_HOME/emulator/emulator" -accel-check || true
           echo no | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd -n "$AVD" -k "system-images;android-34;google_apis;x86_64" --force 2>&1 | tail -5
+          echo "=== AVDs detectados ==="
+          "$ANDROID_HOME/emulator/emulator" -list-avds || true
+          ls -la "$ANDROID_AVD_HOME/" || true
           nohup "$ANDROID_HOME/emulator/emulator" \
             -avd "$AVD" \
             -no-window \
