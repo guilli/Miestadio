@@ -2,6 +2,9 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+        <!-- Fondo de arranque: evita que la app se vea "vacía" (blanco/negro)
+             mientras se monta el bundle JS y la primera pantalla de React. -->
+        <item name="android:windowBackground">#1B5E20</item>
     </style>
 
 </resources>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Platform, PermissionsAndroid } from "react-native";
 import { LocationCoords, Stadium, StadiumWithDistance } from "../types";
 
@@ -69,36 +69,52 @@ interface UseLocationResult {
 export default function useLocation(): UseLocationResult {
   const [userLocation, setUserLocation] = useState<LocationCoords | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  // Evita peticiones superpuestas (permisos apilados o dos getCurrentPosition
+  // a la vez) al arrancar, que en algunos móviles dejaban la app sin respuesta.
+  const inFlight = useRef(false);
 
   const fetchLocation = useCallback(async () => {
+    if (inFlight.current) { return; }
+    inFlight.current = true;
+    const done = () => { inFlight.current = false; };
+
     try {
       const Geolocation = loadGeolocation();
       if (!Geolocation) {
+        done();
         setLocationError("Ubicación no disponible en este dispositivo.");
         return;
       }
       if (Platform.OS === "android") {
         const ok = await requestAndroidPermission();
-        if (!ok) { setLocationError("Permiso de ubicación denegado. Actívalo en Ajustes."); return; }
+        if (!ok) {
+          done();
+          setLocationError("Permiso de ubicación denegado. Actívalo en Ajustes.");
+          return;
+        }
       }
+      const onSuccess = (latitude: number, longitude: number) => {
+        done();
+        setUserLocation({ latitude, longitude });
+        setLocationError(null);
+      };
+      const onFailure = () => {
+        Geolocation.getCurrentPosition(
+          pos => onSuccess(pos.coords.latitude, pos.coords.longitude),
+          () => {
+            done();
+            setLocationError("No se pudo obtener la ubicación. Comprueba el GPS.");
+          },
+          { enableHighAccuracy: false, timeout: 20000, maximumAge: 30000 },
+        );
+      };
       Geolocation.getCurrentPosition(
-        pos => {
-          setUserLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
-          setLocationError(null);
-        },
-        () => {
-          Geolocation.getCurrentPosition(
-            pos => {
-              setUserLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
-              setLocationError(null);
-            },
-            () => setLocationError("No se pudo obtener la ubicación. Comprueba el GPS."),
-            { enableHighAccuracy: false, timeout: 20000, maximumAge: 30000 },
-          );
-        },
+        pos => onSuccess(pos.coords.latitude, pos.coords.longitude),
+        onFailure,
         { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
       );
     } catch {
+      done();
       setLocationError("No se pudo obtener la ubicación.");
     }
   }, []);
