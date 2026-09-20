@@ -44,14 +44,20 @@ jobs:
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
           echo "$SDK_ROOT/platform-tools" >> "$GITHUB_PATH"
           set +o pipefail
-          yes | "$SDKMANAGER" --licenses >/dev/null
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
           set -o pipefail
-          "$SDKMANAGER" \
+          # Las plataformas 37.x y build-tools;37.0.0 ya vienen en el runner.
+          # instalación tolerante por paquete para no abortar el build si un id
+          # concreto no se encuentra en el repositorio de sdkmanager.
+          for pkg in \
             "platform-tools" \
-            "platforms;android-37" \
-            "build-tools;37.0.0" \
             "cmake;3.22.1" \
-            "ndk;27.1.12297006"
+            "ndk;27.1.12297006" \
+          ; do
+            logfile="/tmp/sdk-$(echo "$pkg" | tr ';:' '__').log"
+            "$SDKMANAGER" --install "$pkg" >"$logfile" 2>&1 \
+              || echo "AVISO: '$pkg' no disponible; lo validará el build."
+          done
 
       - name: Cachear Gradle
         uses: actions/cache@v4

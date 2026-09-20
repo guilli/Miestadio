@@ -48,17 +48,25 @@ jobs:
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
           echo "$SDK_ROOT/platform-tools" >> "$GITHUB_PATH"
           set +o pipefail
-          yes | "$SDKMANAGER" --licenses >/dev/null
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
           set -o pipefail
-          "$SDKMANAGER" \
+          # Las plataformas 37.0/37.1/37.2 y build-tools;37.0.0 YA vienen en el
+          # runner; no las pedimos a sdkmanager (a veces el id exacto 'android-37'
+          # no se encuentra y aborta todo el lote). Instalación tolerante por paquete.
+          for pkg in \
             "platform-tools" \
             "emulator" \
             "platforms;android-34" \
             "system-images;android-34;google_apis;x86_64" \
-            "platforms;android-37" \
-            "build-tools;37.0.0" \
             "cmake;3.22.1" \
-            "ndk;27.1.12297006"
+            "ndk;27.1.12297006" \
+          ; do
+            logfile="/tmp/sdk-$(echo "$pkg" | tr ';:' '__').log"
+            "$SDKMANAGER" --install "$pkg" >"$logfile" 2>&1 \
+              || echo "AVISO: '$pkg' no disponible (ya instalado o no descargable); lo validará el build."
+          done
+          echo "=== estado SDK (diagnóstico) ==="
+          "$SDKMANAGER" --list 2>/dev/null | grep -E "platforms;android-3[0-9]|build-tools;3[0-9]|system-images;android-34" | head -40 || true
 
       - name: Cachear Gradle
         uses: actions/cache@v4
