@@ -4,7 +4,6 @@ import { View, Text, StyleSheet, Animated, Easing } from "react-native";
 interface CompassProps {
   bearing: number | null;
   heading: number;
-  stadiumName?: string;
   distance?: number | null;
 }
 
@@ -35,7 +34,7 @@ function formatDist(km: number): string {
   return km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(1)} km`;
 }
 
-export default function Compass({ bearing, heading, stadiumName, distance }: CompassProps) {
+export default function Compass({ bearing, heading, distance }: CompassProps) {
   const roseAnim = useRef(new Animated.Value(0)).current;
   const needleAnim = useRef(new Animated.Value(0)).current;
   const lastRose = useRef(0);
@@ -127,9 +126,6 @@ export default function Compass({ bearing, heading, stadiumName, distance }: Com
           </View>
         </View>
       )}
-      {stadiumName && bearing !== null && (
-        <Text style={styles.stadiumLabel}>🏟 {stadiumName}</Text>
-      )}
     </View>
   );
 }
@@ -161,5 +157,4 @@ const styles = StyleSheet.create({
   infoCellCenter: { borderLeftWidth: 1, borderRightWidth: 1, borderColor: "#C9A84C55", paddingHorizontal: 16 },
   infoLabel: { fontSize: 9, color: "#8A9BBE", fontWeight: "700", letterSpacing: 1 },
   infoVal: { fontSize: 17, color: "#FFD700", fontWeight: "700", marginTop: 2 },
-  stadiumLabel: { marginTop: 8, fontSize: 12, color: "#555", fontWeight: "600", textAlign: "center" },
 });

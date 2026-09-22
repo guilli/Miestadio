@@ -22,7 +22,7 @@ interface Question {
   correct: string; 
 }
 
-const TOTAL = 10;
+const TOTAL = 20;
 
 function buildQuestions(div: DivFilter): Question[] {
   const filtered = div === "todas" ? allStadiums : allStadiums.filter(s => s.division === div);
@@ -179,7 +179,7 @@ export default function QuizScreen(): React.JSX.Element | null {
             <Text style={styles.questionTitle}>¿Qué equipo juega en este estadio?</Text>
             <Text style={styles.stadiumName}>{current.stadium.name}</Text>
             <Text style={styles.stadiumInfo}>
-              {current.stadium.city} • {current.stadium.capacity.toLocaleString()} espectadores
+              {current.stadium.capacity.toLocaleString()} espectadores
             </Text>
           </View>
 

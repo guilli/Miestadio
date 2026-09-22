@@ -47,7 +47,7 @@ export default function HomeScreen() {
             </Picker>
           </View>
         </View>
-        <View style={[styles.pickerWrapRow, styles.teamPicker]}>
+        <View style={styles.pickerWrapRow}>
           <Text style={styles.pickerLabel}>Equipo</Text>
           <View style={styles.pickerBox}>
             <Picker selectedValue={teamId} onValueChange={v => setTeamId(v as string)} style={styles.picker} dropdownIconColor="#2E7D32" mode="dropdown">
@@ -80,8 +80,8 @@ export default function HomeScreen() {
       ) : (
         <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 32 }]} showsVerticalScrollIndicator={false}>
           <View style={styles.compassSection}>
-            <Text style={styles.sectionTitle}>DIRECCIÓN AL ESTADIO</Text>
-            <Compass bearing={stadium.bearing} heading={heading} stadiumName={stadium.name} distance={stadium.distance} />
+            <Text style={styles.sectionTitle}>Dirección al {stadium.name}</Text>
+            <Compass bearing={stadium.bearing} heading={heading} distance={stadium.distance} />
           </View>
           <View style={styles.card}>
             <Text style={styles.cardStadiumName}>{stadium.name}</Text>
@@ -123,12 +123,11 @@ const rowStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#F0F4F0" },
-  selectorsRow: { backgroundColor: "#fff", paddingHorizontal: 8, paddingTop: 8, paddingBottom: Platform.OS === "ios" ? 10 : 6, borderBottomWidth: 1, borderBottomColor: "#E0E0E0", flexDirection: "row", alignItems: "center", gap: 8 },
-  pickerWrapRow: { flex: 1 },
-  teamPicker: { flex: 1.35 },
+  selectorsRow: { backgroundColor: "#fff", paddingHorizontal: 12, paddingTop: 8, paddingBottom: Platform.OS === "ios" ? 10 : 6, borderBottomWidth: 1, borderBottomColor: "#E0E0E0", gap: 8 },
+  pickerWrapRow: { width: "100%" },
   pickerLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 3, textTransform: "uppercase", letterSpacing: 0.3 },
   pickerBox: { borderWidth: 1.5, borderColor: "#C8E6C9", borderRadius: 10, backgroundColor: "#F1F8E9" },
-  picker: { height: 50, fontSize: 15, fontWeight: "600", color: "#1B5E20", width: "100%" },
+  picker: { height: 46, fontSize: 15, fontWeight: "600", color: "#1B5E20", width: "100%" },
   pickerItem: { fontSize: 15 },
   errorBanner: { backgroundColor: "#FFF3E0", borderLeftWidth: 4, borderLeftColor: "#FF6F00", padding: 12, margin: 12, borderRadius: 8 },
   errorText: { color: "#E65100", fontSize: 13 },
@@ -140,7 +139,7 @@ const styles = StyleSheet.create({
   emptyText: { fontSize: 15, color: "#888", textAlign: "center", lineHeight: 24 },
   scroll: { paddingTop: 0 },
   compassSection: { backgroundColor: "#fff", alignItems: "center", paddingVertical: 24, borderBottomWidth: 2, borderBottomColor: "#C9A84C" },
-  sectionTitle: { fontSize: 11, fontWeight: "800", color: "#1B5E20", letterSpacing: 1.5, marginBottom: 12 },
+  sectionTitle: { fontSize: 15, fontWeight: "800", color: "#1B5E20", letterSpacing: 0.2, marginBottom: 12, textAlign: "center", paddingHorizontal: 16 },
   card: { backgroundColor: "#fff", margin: 16, borderRadius: 16, padding: 20, elevation: 4 },
   cardStadiumName: { fontSize: 20, fontWeight: "800", color: "#1A1A2E", marginBottom: 4 },
   cardTeam: { fontSize: 14, color: "#2E7D32", fontWeight: "600", marginBottom: 4 },
