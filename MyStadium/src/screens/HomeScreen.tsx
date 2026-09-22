@@ -38,7 +38,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.selectorsColumn}>
+      <View style={styles.selectorsRow}>
         <View style={styles.pickerWrapRow}>
           <Text style={styles.pickerLabel}>Liga</Text>
           <View style={styles.pickerBox}>
@@ -47,7 +47,7 @@ export default function HomeScreen() {
             </Picker>
           </View>
         </View>
-        <View style={styles.pickerWrapRow}>
+        <View style={[styles.pickerWrapRow, styles.teamPicker]}>
           <Text style={styles.pickerLabel}>Equipo</Text>
           <View style={styles.pickerBox}>
             <Picker selectedValue={teamId} onValueChange={v => setTeamId(v as string)} style={styles.picker} dropdownIconColor="#2E7D32" mode="dropdown">
@@ -123,8 +123,9 @@ const rowStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#F0F4F0" },
-  selectorsColumn: { backgroundColor: "#fff", paddingHorizontal: 12, paddingTop: 8, paddingBottom: Platform.OS === "ios" ? 6 : 4, borderBottomWidth: 1, borderBottomColor: "#E0E0E0", gap: 6 },
-  pickerWrapRow: { width: "100%" },
+  selectorsRow: { backgroundColor: "#fff", paddingHorizontal: 10, paddingTop: 8, paddingBottom: Platform.OS === "ios" ? 8 : 4, borderBottomWidth: 1, borderBottomColor: "#E0E0E0", flexDirection: "row", alignItems: "center", gap: 10 },
+  pickerWrapRow: { flex: 1 },
+  teamPicker: { flex: 1.25 },
   pickerLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 2, textTransform: "uppercase", letterSpacing: 0.3 },
   pickerBox: { borderWidth: 1.5, borderColor: "#C8E6C9", borderRadius: 10, backgroundColor: "#F1F8E9", overflow: "hidden" },
   picker: { height: 48, color: "#1B5E20", width: "100%" },
