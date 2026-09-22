@@ -132,9 +132,9 @@ export default function QuizScreen(): React.JSX.Element | null {
                 style={styles.picker}
                 dropdownIconColor="#2E7D32"
               >
-                <Picker.Item label={t("quiz.divisionOptions.primera")} value="Primera" />
-                <Picker.Item label={t("quiz.divisionOptions.segunda")} value="Segunda" />
-                <Picker.Item label={t("quiz.divisionOptions.all")} value="todas" />
+                <Picker.Item label={t("quiz.divisionOptions.primera")} value="Primera" style={styles.pickerItem} />
+                <Picker.Item label={t("quiz.divisionOptions.segunda")} value="Segunda" style={styles.pickerItem} />
+                <Picker.Item label={t("quiz.divisionOptions.all")} value="todas" style={styles.pickerItem} />
               </Picker>
             </View>
             
@@ -195,9 +195,9 @@ export default function QuizScreen(): React.JSX.Element | null {
                 dropdownIconColor="#2E7D32" 
                 mode="dropdown"
               >
-                <Picker.Item label={t("quiz.selectTeam")} value="__none__" color="#999" />
+                <Picker.Item label={t("quiz.selectTeam")} value="__none__" color="#999" style={styles.pickerItem} />
                 {current.options.map(opt => 
-                  <Picker.Item key={opt} label={opt} value={opt} />
+                  <Picker.Item key={opt} label={opt} value={opt} style={styles.pickerItem} />
                 )}
               </Picker>
             </View>
@@ -308,15 +308,15 @@ const styles = StyleSheet.create({
   },
   setupTitle: { fontSize: 24, fontWeight: "bold", color: "#2E7D32", textAlign: "center", marginBottom: 16 },
   setupDesc: { fontSize: 16, color: "#666", textAlign: "center", marginBottom: 24, lineHeight: 24 },
-  divLabel: { fontSize: 16, fontWeight: "bold", color: "#2E7D32", marginBottom: 8 },
+  divLabel: { fontSize: 16, fontWeight: "bold", color: "#2E7D32", marginBottom: 6 },
   pickerWrap: { 
-    borderWidth: 2, 
+    borderWidth: 1, 
     borderColor: "#C8E6C9", 
     borderRadius: 8, 
     marginBottom: 24, 
     backgroundColor: "#FAFAFA" 
   },
-  picker: { height: 50 },
+  picker: { height: 40 },
   startBtn: { 
     backgroundColor: "#2E7D32", 
     paddingVertical: 16, 
@@ -375,11 +375,12 @@ const styles = StyleSheet.create({
   },
   answerBoxLabel: { fontSize: 16, fontWeight: "bold", color: "#2E7D32", marginBottom: 12 },
   answerPickerWrap: { 
-    borderWidth: 2, 
+    borderWidth: 1, 
     borderRadius: 8, 
     backgroundColor: "#FAFAFA" 
   },
-  answerPicker: { height: 50 },
+  answerPicker: { height: 40 },
+  pickerItem: { fontSize: 17 },
   
   feedbackBox: { 
     padding: 16, 

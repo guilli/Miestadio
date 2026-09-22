@@ -287,11 +287,11 @@ const styles = StyleSheet.create({
   loading: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F0F4F0", gap: 12 },
   loadingText: { color: "#666", fontSize: 14 },
 
-  countryCard: { backgroundColor: "#fff", borderRadius: 14, padding: 12, elevation: 2, gap: 4 },
-  countryLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, textTransform: "uppercase", letterSpacing: 0.3 },
-  pickerBox: { borderWidth: 1.5, borderColor: "#C8E6C9", borderRadius: 10, backgroundColor: "#F1F8E9" },
-  picker: { height: 44, fontSize: 15, fontWeight: "600", color: "#1B5E20", width: "100%" },
-  pickerItem: { fontSize: 15 },
+  countryCard: { backgroundColor: "#fff", borderRadius: 14, padding: 10, elevation: 2, gap: 3 },
+  countryLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 2, textTransform: "uppercase", letterSpacing: 0.3 },
+  pickerBox: { borderWidth: 1, borderColor: "#C8E6C9", borderRadius: 8, backgroundColor: "#F1F8E9" },
+  picker: { height: 38, fontSize: 17, fontWeight: "600", color: "#1B5E20", width: "100%" },
+  pickerItem: { fontSize: 17 },
 
   hero: { backgroundColor: "#1B5E20", borderRadius: 20, padding: 20, alignItems: "center" },
   heroTitle: { fontSize: 14, fontWeight: "800", color: "#A5D6A7", textTransform: "uppercase", letterSpacing: 1 },
