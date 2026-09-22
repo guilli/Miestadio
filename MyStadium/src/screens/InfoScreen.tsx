@@ -6,6 +6,7 @@ const FEATURES = [
   { icon: "🧭", title: "Brújula al estadio", desc: "Selecciona un equipo y la brújula apuntará en tiempo real hacia su estadio, mostrando rumbo y distancia desde tu posición." },
   { icon: "📋", title: "Ficha del estadio", desc: "Consulta nombre, equipo, ciudad, liga, aforo y año de inauguración de cada estadio." },
   { icon: "🧠", title: "Quiz de campos", desc: "Pon a prueba tus conocimientos: se muestra el estadio y debes elegir el equipo correcto." },
+  { icon: "✅", title: "Campos visitados", desc: "Marca los campos en los que has estado y consulta tus estadísticas: progreso, ciudades, aforo y más." },
   { icon: "📲", title: "Compartir resultados", desc: "Al terminar el quiz puedes compartir tu puntuación por cualquier app de mensajería." },
 ];
 

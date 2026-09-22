@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HomeScreen from "../screens/HomeScreen";
 import QuizScreen from "../screens/QuizScreen";
+import VisitedScreen from "../screens/VisitedScreen";
 import InfoScreen from "../screens/InfoScreen";
 import { TabParamList } from "../types";
 
@@ -12,6 +13,7 @@ const Tab = createBottomTabNavigator<TabParamList>();
 const TABS: { name: keyof TabParamList; emoji: string; label: string }[] = [
   { name: "Home", emoji: "🧭", label: "Brújula" },
   { name: "Quiz", emoji: "🧠", label: "Quiz" },
+  { name: "Visited", emoji: "✅", label: "Campos" },
   { name: "Info", emoji: "ℹ️", label: "Ayuda" },
 ];
 
@@ -55,6 +57,7 @@ export default function AppNavigator() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Quiz" component={QuizScreen} />
+      <Tab.Screen name="Visited" component={VisitedScreen} />
       <Tab.Screen name="Info" component={InfoScreen} />
     </Tab.Navigator>
   );

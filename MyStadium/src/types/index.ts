@@ -28,5 +28,6 @@ export interface StadiumWithDistance extends Stadium {
 export type TabParamList = {
   Home: undefined;
   Quiz: undefined;
+  Visited: undefined;
   Info: undefined;
 };
