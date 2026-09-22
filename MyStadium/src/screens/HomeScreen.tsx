@@ -43,7 +43,7 @@ export default function HomeScreen() {
           <Text style={styles.pickerLabel}>Liga</Text>
           <View style={styles.pickerBox}>
             <Picker selectedValue={leagueId} onValueChange={v => setLeagueId(v as LeagueId)} style={styles.picker} dropdownIconColor="#2E7D32">
-              {LEAGUES.map(l => <Picker.Item key={l.id} label={l.label} value={l.id} />)}
+              {LEAGUES.map(l => <Picker.Item key={l.id} label={l.label} value={l.id} style={styles.pickerItem} />)}
             </Picker>
           </View>
         </View>
@@ -51,8 +51,8 @@ export default function HomeScreen() {
           <Text style={styles.pickerLabel}>Equipo</Text>
           <View style={styles.pickerBox}>
             <Picker selectedValue={teamId} onValueChange={v => setTeamId(v as string)} style={styles.picker} dropdownIconColor="#2E7D32" mode="dropdown">
-              <Picker.Item label="— Elige un equipo —" value={PLACEHOLDER} color="#999" />
-              {filteredStadiums.map(s => <Picker.Item key={s.teamId} label={s.teamName} value={s.teamId} />)}
+              <Picker.Item label="— Elige un equipo —" value={PLACEHOLDER} color="#999" style={styles.pickerItem} />
+              {filteredStadiums.map(s => <Picker.Item key={s.teamId} label={s.teamName} value={s.teamId} style={styles.pickerItem} />)}
             </Picker>
           </View>
         </View>
@@ -123,12 +123,13 @@ const rowStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#F0F4F0" },
-  selectorsRow: { backgroundColor: "#fff", paddingHorizontal: 10, paddingTop: 8, paddingBottom: Platform.OS === "ios" ? 8 : 4, borderBottomWidth: 1, borderBottomColor: "#E0E0E0", flexDirection: "row", alignItems: "center", gap: 10 },
+  selectorsRow: { backgroundColor: "#fff", paddingHorizontal: 8, paddingTop: 8, paddingBottom: Platform.OS === "ios" ? 10 : 6, borderBottomWidth: 1, borderBottomColor: "#E0E0E0", flexDirection: "row", alignItems: "center", gap: 8 },
   pickerWrapRow: { flex: 1 },
-  teamPicker: { flex: 1.25 },
-  pickerLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 2, textTransform: "uppercase", letterSpacing: 0.3 },
-  pickerBox: { borderWidth: 1.5, borderColor: "#C8E6C9", borderRadius: 10, backgroundColor: "#F1F8E9", overflow: "hidden" },
-  picker: { height: 48, color: "#1B5E20", width: "100%" },
+  teamPicker: { flex: 1.35 },
+  pickerLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 3, textTransform: "uppercase", letterSpacing: 0.3 },
+  pickerBox: { borderWidth: 1.5, borderColor: "#C8E6C9", borderRadius: 10, backgroundColor: "#F1F8E9" },
+  picker: { height: 50, fontSize: 15, fontWeight: "600", color: "#1B5E20", width: "100%" },
+  pickerItem: { fontSize: 15 },
   errorBanner: { backgroundColor: "#FFF3E0", borderLeftWidth: 4, borderLeftColor: "#FF6F00", padding: 12, margin: 12, borderRadius: 8 },
   errorText: { color: "#E65100", fontSize: 13 },
   errorRetry: { color: "#F57C00", fontSize: 12, marginTop: 2, textDecorationLine: "underline" },
