@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator, Share, Linking } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator, Share, Linking, Platform } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
   countryCard: { backgroundColor: "#fff", borderRadius: 14, padding: 10, elevation: 2, gap: 3 },
   countryLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 2, textTransform: "uppercase", letterSpacing: 0.3 },
   pickerBox: { borderWidth: 1, borderColor: "#C8E6C9", borderRadius: 10, backgroundColor: "#E8F5E9", justifyContent: "center" },
-  picker: { height: 44, fontSize: 15, fontWeight: "600", color: "#1B5E20", width: "100%" },
+  picker: { ...(Platform.OS === "ios" ? { height: 44 } : {}), fontSize: 15, fontWeight: "600", color: "#1B5E20", width: "100%" },
   pickerItem: { fontSize: 15 },
 
   hero: { backgroundColor: "#1B5E20", borderRadius: 20, padding: 20, alignItems: "center" },

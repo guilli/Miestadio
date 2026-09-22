@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   pickerWrapRow: { width: "100%" },
   pickerLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 2, textTransform: "uppercase", letterSpacing: 0.3 },
   pickerBox: { borderWidth: 1, borderColor: "#C8E6C9", borderRadius: 10, backgroundColor: "#E8F5E9", justifyContent: "center" },
-  picker: { height: 44, fontSize: 15, fontWeight: "600", color: "#1B5E20", width: "100%" },
+  picker: { ...(Platform.OS === "ios" ? { height: 44 } : {}), fontSize: 15, fontWeight: "600", color: "#1B5E20", width: "100%" },
   pickerItem: { fontSize: 15 },
   errorBanner: { backgroundColor: "#FFF3E0", borderLeftWidth: 4, borderLeftColor: "#FF6F00", padding: 12, margin: 12, borderRadius: 8 },
   errorText: { color: "#E65100", fontSize: 13 },

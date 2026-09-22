@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   picker: {
-    height: 48,
+    ...(Platform.OS === 'ios' ? { height: 48 } : {}),
     color: '#1B5E20',
     width: '100%',
   },

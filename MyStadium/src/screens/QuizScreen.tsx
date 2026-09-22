@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Share, Linking } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Share, Linking, Platform } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     marginBottom: 24, 
     backgroundColor: "#E8F5E9" 
   },
-  picker: { height: 44, color: "#1B5E20", fontWeight: "600" },
+  picker: { ...(Platform.OS === "ios" ? { height: 44 } : {}), color: "#1B5E20", fontWeight: "600" },
   startBtn: { 
     backgroundColor: "#2E7D32", 
     paddingVertical: 16, 
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     borderRadius: 10, 
     backgroundColor: "#E8F5E9" 
   },
-  answerPicker: { height: 44, color: "#1B5E20", fontWeight: "600" },
+  answerPicker: { ...(Platform.OS === "ios" ? { height: 44 } : {}), color: "#1B5E20", fontWeight: "600" },
   pickerItem: { fontSize: 15 },
   
   feedbackBox: { 
