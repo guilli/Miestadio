@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   setupDesc: { fontSize: 16, color: "#666", textAlign: "center", marginBottom: 24, lineHeight: 24 },
   divLabel: { fontSize: 16, fontWeight: "bold", color: "#2E7D32", marginBottom: 6 },
   pickerWrap: { 
-    borderWidth: 1, 
+    borderWidth: 0.5, 
     borderColor: "#C8E6C9", 
     borderRadius: 8, 
     marginBottom: 24, 
@@ -375,12 +375,12 @@ const styles = StyleSheet.create({
   },
   answerBoxLabel: { fontSize: 16, fontWeight: "bold", color: "#2E7D32", marginBottom: 12 },
   answerPickerWrap: { 
-    borderWidth: 1, 
+    borderWidth: 0.5, 
     borderRadius: 8, 
     backgroundColor: "#FAFAFA" 
   },
   answerPicker: { height: 40 },
-  pickerItem: { fontSize: 17 },
+  pickerItem: { fontSize: 15 },
   
   feedbackBox: { 
     padding: 16, 
