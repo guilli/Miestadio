@@ -8,14 +8,10 @@ import useLocation from "../hooks/useLocation";
 import useMagnetometer from "../hooks/useMagnetometer";
 import Compass from "../components/Compass";
 
-type CountryId = "spain";
-type LeagueId = "primera" | "segunda";
-const COUNTRIES: { id: CountryId; label: string; country: Country }[] = [
-  { id: "spain", label: "España", country: "España" },
-];
-const LEAGUES: { id: LeagueId; label: string; division: Division }[] = [
-  { id: "primera", label: "🥇 Primera División", division: "Primera" },
-  { id: "segunda", label: "🥈 Segunda División", division: "Segunda" },
+type LeagueId = "spain_primera" | "spain_segunda";
+const LEAGUES: { id: LeagueId; label: string; country: Country; division: Division }[] = [
+  { id: "spain_primera", label: "España · 1ª División", country: "España", division: "Primera" },
+  { id: "spain_segunda", label: "España · 2ª División", country: "España", division: "Segunda" },
 ];
 const PLACEHOLDER = "__none__";
 
@@ -24,18 +20,16 @@ export default function HomeScreen() {
   const { userLocation, locationError, enrichStadiums, refreshLocation } = useLocation();
   const heading = useMagnetometer();
 
-  const [leagueId, setLeagueId] = useState<LeagueId>("primera");
-  const [countryId, setCountryId] = useState<CountryId>("spain");
+  const [leagueId, setLeagueId] = useState<LeagueId>("spain_primera");
   const [teamId, setTeamId] = useState<string>(PLACEHOLDER);
-  const league = useMemo(() => LEAGUES.find(l => l.id === leagueId)!, [leagueId]);
+  const league = useMemo(() => LEAGUES.find(l => l.id === leagueId) ?? LEAGUES[0], [leagueId]);
 
   const filteredStadiums = useMemo<StadiumWithDistance[]>(() => {
-    const country = COUNTRIES.find(c => c.id === countryId)?.country;
-    const base = allStadiums.filter(s => s.country === country && s.division === league.division);
+    const base = allStadiums.filter(s => s.country === league.country && s.division === league.division);
     return enrichStadiums(base).sort((a, b) => a.teamName.localeCompare(b.teamName));
-  }, [countryId, league, enrichStadiums]);
+  }, [league, enrichStadiums]);
 
-  useEffect(() => { setTeamId(PLACEHOLDER); }, [countryId, leagueId]);
+  useEffect(() => { setTeamId(PLACEHOLDER); }, [leagueId]);
 
   const stadium = useMemo<StadiumWithDistance | null>(
     () => teamId === PLACEHOLDER ? null : filteredStadiums.find(s => s.teamId === teamId) ?? null,
@@ -44,20 +38,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>🏟 MyStadium</Text>
-        <Text style={styles.headerSub}>Campos de fútbol · España</Text>
-      </View>
-
-      <View style={styles.selectorsRow}>
-        <View style={styles.pickerWrapRow}>
-          <Text style={styles.pickerLabel}>País</Text>
-          <View style={styles.pickerBox}>
-            <Picker selectedValue={countryId} onValueChange={v => setCountryId(v as CountryId)} style={styles.picker} dropdownIconColor="#2E7D32">
-              {COUNTRIES.map(c => <Picker.Item key={c.id} label={c.label} value={c.id} />)}
-            </Picker>
-          </View>
-        </View>
+      <View style={styles.selectorsColumn}>
         <View style={styles.pickerWrapRow}>
           <Text style={styles.pickerLabel}>Liga</Text>
           <View style={styles.pickerBox}>
@@ -66,8 +47,7 @@ export default function HomeScreen() {
             </Picker>
           </View>
         </View>
-
-        <View style={[styles.pickerWrapRow, styles.pickerRight, styles.teamPicker]}>
+        <View style={styles.pickerWrapRow}>
           <Text style={styles.pickerLabel}>Equipo</Text>
           <View style={styles.pickerBox}>
             <Picker selectedValue={teamId} onValueChange={v => setTeamId(v as string)} style={styles.picker} dropdownIconColor="#2E7D32" mode="dropdown">
@@ -143,15 +123,9 @@ const rowStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#F0F4F0" },
-  header: { backgroundColor: "#1B5E20", paddingHorizontal: 20, paddingVertical: 14 },
-  headerTitle: { fontSize: 24, fontWeight: "900", color: "#fff", letterSpacing: 0.5 },
-  headerSub: { fontSize: 12, color: "#A5D6A7", marginTop: 2 },
-  selectorsRow: { backgroundColor: "#fff", paddingHorizontal: 12, paddingTop: 10, paddingBottom: Platform.OS === "ios" ? 8 : 4, borderBottomWidth: 1, borderBottomColor: "#E0E0E0", flexDirection: "row", alignItems: "center" },
-  pickerWrapRow: { flex: 1, marginRight: 8 },
-  teamPicker: { flex: 1.45 },
-  pickerRight: { marginRight: 0 },
-  pickerWrap: {},
-  pickerLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.3 },
+  selectorsColumn: { backgroundColor: "#fff", paddingHorizontal: 12, paddingTop: 8, paddingBottom: Platform.OS === "ios" ? 6 : 4, borderBottomWidth: 1, borderBottomColor: "#E0E0E0", gap: 6 },
+  pickerWrapRow: { width: "100%" },
+  pickerLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 2, textTransform: "uppercase", letterSpacing: 0.3 },
   pickerBox: { borderWidth: 1.5, borderColor: "#C8E6C9", borderRadius: 10, backgroundColor: "#F1F8E9", overflow: "hidden" },
   picker: { height: 48, color: "#1B5E20", width: "100%" },
   errorBanner: { backgroundColor: "#FFF3E0", borderLeftWidth: 4, borderLeftColor: "#FF6F00", padding: 12, margin: 12, borderRadius: 8 },

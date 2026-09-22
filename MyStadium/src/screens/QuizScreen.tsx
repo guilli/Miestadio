@@ -115,9 +115,6 @@ export default function QuizScreen(): React.JSX.Element | null {
   if (gameState === "setup") {
     return (
       <View style={styles.screen}>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>🧠 Quiz</Text>
-        </View>
         <ScrollView contentContainerStyle={[styles.setupContent, { paddingBottom: insets.bottom + 40 }]}>
           <View style={styles.setupCard}>
             <Text style={styles.setupTitle}>Quiz de Estadios</Text>
@@ -168,7 +165,7 @@ export default function QuizScreen(): React.JSX.Element | null {
           >
             <Text style={styles.exitTxt}>✕</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>🧠 Quiz</Text>
+          <Text style={styles.headerTitle}>Pregunta {index + 1} / {TOTAL}</Text>
           <Text style={styles.scoreTxt}>{score} ✓</Text>
         </View>
         
@@ -234,9 +231,6 @@ export default function QuizScreen(): React.JSX.Element | null {
   if (gameState === "finished") {
     return (
       <View style={styles.screen}>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>🧠 Quiz</Text>
-        </View>
         <ScrollView contentContainerStyle={[styles.finishedContent, { paddingBottom: insets.bottom + 40 }]}>
           <View style={styles.resultCard}>
             <Text style={styles.resultTitle}>¡Quiz Completado!</Text>

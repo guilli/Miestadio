@@ -13,7 +13,6 @@ export default function InfoScreen() {
   const insets = useSafeAreaInsets();
   return (
     <View style={styles.screen}>
-      <View style={styles.header}><Text style={styles.headerTitle}>ℹ️ Información</Text></View>
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 32 }]} showsVerticalScrollIndicator={false}>
         <View style={styles.hero}>
           <Text style={styles.heroIcon}>🏟</Text>
@@ -56,8 +55,6 @@ export default function InfoScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#F0F4F0" },
-  header: { backgroundColor: "#1B5E20", paddingHorizontal: 20, paddingVertical: 14 },
-  headerTitle: { fontSize: 18, fontWeight: "800", color: "#fff" },
   content: { padding: 20 },
   hero: { alignItems: "center", backgroundColor: "#1B5E20", borderRadius: 20, paddingVertical: 32, paddingHorizontal: 20, marginBottom: 28 },
   heroIcon: { fontSize: 64, marginBottom: 8 },
