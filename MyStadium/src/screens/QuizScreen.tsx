@@ -310,13 +310,13 @@ const styles = StyleSheet.create({
   setupDesc: { fontSize: 16, color: "#666", textAlign: "center", marginBottom: 24, lineHeight: 24 },
   divLabel: { fontSize: 16, fontWeight: "bold", color: "#2E7D32", marginBottom: 6 },
   pickerWrap: { 
-    borderWidth: 0.5, 
+    borderWidth: 1, 
     borderColor: "#C8E6C9", 
-    borderRadius: 8, 
+    borderRadius: 10, 
     marginBottom: 24, 
-    backgroundColor: "#FAFAFA" 
+    backgroundColor: "#E8F5E9" 
   },
-  picker: { height: 40 },
+  picker: { height: 44, color: "#1B5E20", fontWeight: "600" },
   startBtn: { 
     backgroundColor: "#2E7D32", 
     paddingVertical: 16, 
@@ -375,11 +375,11 @@ const styles = StyleSheet.create({
   },
   answerBoxLabel: { fontSize: 16, fontWeight: "bold", color: "#2E7D32", marginBottom: 12 },
   answerPickerWrap: { 
-    borderWidth: 0.5, 
-    borderRadius: 8, 
-    backgroundColor: "#FAFAFA" 
+    borderWidth: 1, 
+    borderRadius: 10, 
+    backgroundColor: "#E8F5E9" 
   },
-  answerPicker: { height: 40 },
+  answerPicker: { height: 44, color: "#1B5E20", fontWeight: "600" },
   pickerItem: { fontSize: 15 },
   
   feedbackBox: { 
