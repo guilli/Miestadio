@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator, Share, Linking } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { stadiums as allStadiums } from "../data/stadiums";
 import { Division, Stadium } from "../types";
 import { loadVisited, saveVisited } from "../storage/visitedStorage";
+
+const COUNTRIES = Array.from(new Set(allStadiums.map(s => s.country)));
 
 type Filter = "todos" | "visitados" | "pendientes";
 
@@ -40,6 +43,7 @@ export default function VisitedScreen() {
   const insets = useSafeAreaInsets();
   const [visited, setVisited] = useState<string[] | null>(null);
   const [filter, setFilter] = useState<Filter>("todos");
+  const [country, setCountry] = useState<string>(COUNTRIES[0] ?? "España");
 
   useEffect(() => {
     let alive = true;
@@ -121,6 +125,29 @@ export default function VisitedScreen() {
     return true;
   }, [filter, visitedSet]);
 
+  const handleShare = useCallback(() => {
+    const lines = stats.visitedStadiums
+      .map(s => `• ${s.name} (${s.teamName})`)
+      .join("\n");
+
+    const msg = [
+      `🏟 MyStadium · Mis campos visitados`,
+      ``,
+      `✅ ${stats.count}/${stats.total} campos (${stats.pct.toFixed(0)}%)`,
+      ...stats.byDivision.map(d => `${d.id === "Primera" ? "⭐" : "🌟"} ${d.id}: ${d.done}/${d.total}`),
+      `🏙 Ciudades: ${stats.citiesVisited}/${stats.citiesTotal}`,
+      `👥 Aforo acumulado: ${stats.capacity.toLocaleString("es-ES")} espectadores`,
+      `📜 Estadio más antiguo: ${stats.oldest ?? "—"}`,
+      `🏗 Estadio más moderno: ${stats.newest ?? "—"}`,
+      ``,
+      `🏆 Campos visitados (${stats.count}):`,
+      stats.count > 0 ? lines : `• Aún no he marcado ningún campo`,
+    ].join("\n");
+
+    const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(msg)}`;
+    Linking.openURL(whatsappUrl).catch(() => Share.share({ message: msg }));
+  }, [stats]);
+
   if (visited === null) {
     return (
       <View style={styles.loading}>
@@ -136,6 +163,15 @@ export default function VisitedScreen() {
       contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 32 }]}
       showsVerticalScrollIndicator={false}
     >
+      <View style={styles.countryCard}>
+        <Text style={styles.countryLabel}>País</Text>
+        <View style={styles.pickerBox}>
+          <Picker selectedValue={country} onValueChange={v => setCountry(v as string)} style={styles.picker} dropdownIconColor="#2E7D32">
+            {COUNTRIES.map(c => <Picker.Item key={c} label={c} value={c} style={styles.pickerItem} />)}
+          </Picker>
+        </View>
+      </View>
+
       <View style={styles.hero}>
         <Text style={styles.heroTitle}>Campos que has visitado</Text>
         <View style={styles.heroNumbers}>
@@ -167,6 +203,15 @@ export default function VisitedScreen() {
         <StatTile icon="🏗" label="Más moderno" value={stats.newest != null ? String(stats.newest) : "—"} />
       </View>
 
+      <TouchableOpacity
+        style={[styles.shareBtn, stats.count === 0 && styles.shareBtnDisabled]}
+        onPress={handleShare}
+        disabled={stats.count === 0}
+        accessibilityRole="button"
+      >
+        <Text style={styles.shareBtnText}>📤 Enviar mis estadísticas y campos</Text>
+      </TouchableOpacity>
+
       <View style={styles.filtersRow}>
         {FILTERS.map(f => {
           const active = filter === f.id;
@@ -188,9 +233,10 @@ export default function VisitedScreen() {
       </View>
 
       {DIVISIONS.map(d => {
-        const list = allStadiums.filter(s => s.division === d.id && matchesFilter(s));
-        const done = allStadiums.filter(s => s.division === d.id && visitedSet.has(s.id)).length;
-        const total = allStadiums.filter(s => s.division === d.id).length;
+        const byCountry = allStadiums.filter(s => s.country === country);
+        const list = byCountry.filter(s => s.division === d.id && matchesFilter(s));
+        const done = byCountry.filter(s => s.division === d.id && visitedSet.has(s.id)).length;
+        const total = byCountry.filter(s => s.division === d.id).length;
         if (list.length === 0) return null;
         return (
           <View key={d.id}>
@@ -239,6 +285,12 @@ const styles = StyleSheet.create({
   loading: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F0F4F0", gap: 12 },
   loadingText: { color: "#666", fontSize: 14 },
 
+  countryCard: { backgroundColor: "#fff", borderRadius: 14, padding: 12, elevation: 2, gap: 4 },
+  countryLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, textTransform: "uppercase", letterSpacing: 0.3 },
+  pickerBox: { borderWidth: 1.5, borderColor: "#C8E6C9", borderRadius: 10, backgroundColor: "#F1F8E9" },
+  picker: { height: 44, fontSize: 15, fontWeight: "600", color: "#1B5E20", width: "100%" },
+  pickerItem: { fontSize: 15 },
+
   hero: { backgroundColor: "#1B5E20", borderRadius: 20, padding: 20, alignItems: "center" },
   heroTitle: { fontSize: 14, fontWeight: "800", color: "#A5D6A7", textTransform: "uppercase", letterSpacing: 1 },
   heroNumbers: { flexDirection: "row", alignItems: "flex-end", marginTop: 6 },
@@ -257,6 +309,10 @@ const styles = StyleSheet.create({
   statIcon: { fontSize: 20, marginBottom: 4 },
   statLabel: { fontSize: 10, color: "#999", fontWeight: "700", textTransform: "uppercase", letterSpacing: 0.5 },
   statValue: { fontSize: 17, fontWeight: "800", color: "#1A1A2E", marginTop: 3 },
+
+  shareBtn: { backgroundColor: "#2E7D32", borderRadius: 14, paddingVertical: 16, alignItems: "center", elevation: 3 },
+  shareBtnDisabled: { backgroundColor: "#A5D6A7", elevation: 0 },
+  shareBtnText: { fontSize: 15, fontWeight: "800", color: "#fff", letterSpacing: 0.3 },
 
   filtersRow: { flexDirection: "row", alignItems: "center", gap: 8, marginTop: 2 },
   chip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: "#fff", borderWidth: 1, borderColor: "#C8E6C9" },
