@@ -12,7 +12,7 @@ const FEATURES = [
 export default function InfoScreen() {
   const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.screen, { paddingTop: insets.top }]}>
+    <View style={styles.screen}>
       <View style={styles.header}><Text style={styles.headerTitle}>ℹ️ Información</Text></View>
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 32 }]} showsVerticalScrollIndicator={false}>
         <View style={styles.hero}>

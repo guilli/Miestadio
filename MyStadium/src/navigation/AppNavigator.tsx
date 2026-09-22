@@ -17,12 +17,12 @@ export default function AppNavigator() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarPosition: "top",
         tabBarStyle: {
           backgroundColor: "#1B5E20",
+          borderBottomWidth: 0,
           borderTopWidth: 0,
           elevation: 12,
-          height: 62,
-          paddingBottom: 8,
         },
         tabBarActiveTintColor: "#FFD700",
         tabBarInactiveTintColor: "#A5D6A7",

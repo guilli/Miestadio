@@ -114,7 +114,7 @@ export default function QuizScreen(): React.JSX.Element | null {
 
   if (gameState === "setup") {
     return (
-      <View style={[styles.screen, { paddingTop: insets.top }]}>
+      <View style={styles.screen}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>🧠 Quiz</Text>
         </View>
@@ -153,7 +153,7 @@ export default function QuizScreen(): React.JSX.Element | null {
     const pickerBorderColor = !answered ? "#C8E6C9" : selected === current.correct ? "#2E7D32" : "#C62828";
     
     return (
-      <View style={[styles.screen, { paddingTop: insets.top }]}>
+      <View style={styles.screen}>
         <View style={styles.header}>
           <TouchableOpacity 
             style={styles.exitBtn} 
@@ -233,7 +233,7 @@ export default function QuizScreen(): React.JSX.Element | null {
 
   if (gameState === "finished") {
     return (
-      <View style={[styles.screen, { paddingTop: insets.top }]}>
+      <View style={styles.screen}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>🧠 Quiz</Text>
         </View>

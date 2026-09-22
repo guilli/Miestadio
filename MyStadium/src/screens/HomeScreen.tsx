@@ -43,7 +43,7 @@ export default function HomeScreen() {
   );
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top }]}>
+    <View style={styles.screen}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>🏟 MyStadium</Text>
         <Text style={styles.headerSub}>Campos de fútbol · España</Text>
