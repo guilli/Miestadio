@@ -1,6 +1,8 @@
 export type Division = "Primera" | "Segunda";
 export type Country = "España";
 
+export type SportId = "futbol" | "baloncesto" | "rugby" | "sumo" | "futbolamericano";
+
 export interface LocationCoords {
   latitude: number;
   longitude: number;
