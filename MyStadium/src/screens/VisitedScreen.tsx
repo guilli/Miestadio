@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator, Share, Linking } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { stadiums as allStadiums } from "../data/stadiums";
 import { Division, Stadium } from "../types";
 import { loadVisited, saveVisited } from "../storage/visitedStorage";
@@ -10,15 +11,15 @@ const COUNTRIES = Array.from(new Set(allStadiums.map(s => s.country)));
 
 type Filter = "todos" | "visitados" | "pendientes";
 
-const FILTERS: { id: Filter; label: string }[] = [
-  { id: "todos", label: "Todos" },
-  { id: "visitados", label: "Visitados" },
-  { id: "pendientes", label: "Pendientes" },
+const FILTERS: { id: Filter; labelKey: string }[] = [
+  { id: "todos", labelKey: "visited.filterAll" },
+  { id: "visitados", labelKey: "visited.filterVisited" },
+  { id: "pendientes", labelKey: "visited.filterPending" },
 ];
 
-const DIVISIONS: { id: Division; label: string }[] = [
-  { id: "Primera", label: "Primera División" },
-  { id: "Segunda", label: "Segunda División" },
+const DIVISIONS: { id: Division; labelKey: string }[] = [
+  { id: "Primera", labelKey: "visited.divisionOption.primera" },
+  { id: "Segunda", labelKey: "visited.divisionOption.segunda" },
 ];
 
 function ProgressBar({ pct, height = 10, track = "#E8F5E9", fill = "#2E7D32" }: { pct: number; height?: number; track?: string; fill?: string }) {
@@ -41,6 +42,7 @@ function StatTile({ icon, label, value }: { icon: string; label: string; value: 
 
 export default function VisitedScreen() {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const [visited, setVisited] = useState<string[] | null>(null);
   const [filter, setFilter] = useState<Filter>("todos");
   const [country, setCountry] = useState<string>(COUNTRIES[0] ?? "España");
@@ -66,12 +68,12 @@ export default function VisitedScreen() {
 
   const handleReset = useCallback(() => {
     Alert.alert(
-      "Reiniciar marcadores",
-      "Se desmarcarán todos los campos visitados. ¿Quieres continuar?",
+      t("visited.resetTitle"),
+      t("visited.resetMsg"),
       [
-        { text: "Cancelar", style: "cancel" },
+        { text: t("visited.cancel"), style: "cancel" },
         {
-          text: "Reiniciar",
+          text: t("visited.reset"),
           style: "destructive",
           onPress: () => {
             setVisited([]);
@@ -80,7 +82,7 @@ export default function VisitedScreen() {
         },
       ],
     );
-  }, []);
+  }, [t]);
 
   const visitedSet = useMemo(() => new Set(visited ?? []), [visited]);
 
@@ -131,28 +133,28 @@ export default function VisitedScreen() {
       .join("\n");
 
     const msg = [
-      `🏟 MyStadium · Mis campos visitados`,
+      t("visited.shareTitle"),
       ``,
-      `✅ ${stats.count}/${stats.total} campos (${stats.pct.toFixed(0)}%)`,
+      t("visited.shareCount", { count: stats.count, total: stats.total, percent: stats.pct.toFixed(0) }),
       ...stats.byDivision.map(d => `${d.id === "Primera" ? "⭐" : "🌟"} ${d.id}: ${d.done}/${d.total}`),
-      `🏙 Ciudades: ${stats.citiesVisited}/${stats.citiesTotal}`,
-      `👥 Aforo acumulado: ${stats.capacity.toLocaleString("es-ES")} espectadores`,
-      `📜 Estadio más antiguo: ${stats.oldest ?? "—"}`,
-      `🏗 Estadio más moderno: ${stats.newest ?? "—"}`,
+      t("visited.shareCities", { count: stats.citiesVisited, total: stats.citiesTotal }),
+      t("visited.shareCapacity", { count: stats.capacity.toLocaleString("es-ES") }),
+      t("visited.shareOldest", { year: stats.oldest ?? "—" }),
+      t("visited.shareNewest", { year: stats.newest ?? "—" }),
       ``,
-      `🏆 Campos visitados (${stats.count}):`,
-      stats.count > 0 ? lines : `• Aún no he marcado ningún campo`,
+      t("visited.shareVisitedTitle", { count: stats.count }),
+      stats.count > 0 ? lines : t("visited.shareNoVisited"),
     ].join("\n");
 
     const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(msg)}`;
     Linking.openURL(whatsappUrl).catch(() => Share.share({ message: msg }));
-  }, [stats]);
+  }, [stats, t]);
 
   if (visited === null) {
     return (
       <View style={styles.loading}>
         <ActivityIndicator size="large" color="#2E7D32" />
-        <Text style={styles.loadingText}>Cargando tus marcadores…</Text>
+        <Text style={styles.loadingText}>{t("visited.loading")}</Text>
       </View>
     );
   }
@@ -164,7 +166,7 @@ export default function VisitedScreen() {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.countryCard}>
-        <Text style={styles.countryLabel}>País</Text>
+        <Text style={styles.countryLabel}>{t("visited.country")}</Text>
         <View style={styles.pickerBox}>
           <Picker selectedValue={country} onValueChange={v => setCountry(v as string)} style={styles.picker} dropdownIconColor="#2E7D32">
             {COUNTRIES.map(c => <Picker.Item key={c} label={c} value={c} style={styles.pickerItem} />)}
@@ -173,12 +175,12 @@ export default function VisitedScreen() {
       </View>
 
       <View style={styles.hero}>
-        <Text style={styles.heroTitle}>Campos que has visitado</Text>
+        <Text style={styles.heroTitle}>{t("visited.heroTitle")}</Text>
         <View style={styles.heroNumbers}>
           <Text style={styles.heroCount}>{stats.count}</Text>
           <Text style={styles.heroTotal}>/{stats.total}</Text>
         </View>
-        <Text style={styles.heroPct}>{stats.pct.toFixed(0)}% completado</Text>
+        <Text style={styles.heroPct}>{t("visited.completed", { percent: stats.pct.toFixed(0) })}</Text>
         <View style={styles.heroBarWrap}>
           <ProgressBar pct={stats.pct} height={12} track="rgba(255,255,255,0.25)" fill="#FFD700" />
         </View>
@@ -187,7 +189,7 @@ export default function VisitedScreen() {
           {stats.byDivision.map(d => (
             <View key={d.id} style={styles.divisionRow}>
               <View style={styles.divisionLabels}>
-                <Text style={styles.divisionName}>{d.id === "Primera" ? "⭐ Primera" : "🌟 Segunda"}</Text>
+                <Text style={styles.divisionName}>{d.id === "Primera" ? t("visited.divisionPrimera") : t("visited.divisionSegunda")}</Text>
                 <Text style={styles.divisionCount}>{d.done}/{d.total}</Text>
               </View>
               <ProgressBar pct={d.pct} height={7} track="rgba(255,255,255,0.2)" fill="#A5D6A7" />
@@ -197,10 +199,10 @@ export default function VisitedScreen() {
       </View>
 
       <View style={styles.statsGrid}>
-        <StatTile icon="🏙" label="Ciudades" value={`${stats.citiesVisited}/${stats.citiesTotal}`} />
-        <StatTile icon="👥" label="Aforo acumulado" value={stats.capacity.toLocaleString("es-ES")} />
-        <StatTile icon="📜" label="Más antiguo" value={stats.oldest != null ? String(stats.oldest) : "—"} />
-        <StatTile icon="🏗" label="Más moderno" value={stats.newest != null ? String(stats.newest) : "—"} />
+        <StatTile icon="🏙" label={t("visited.cities")} value={`${stats.citiesVisited}/${stats.citiesTotal}`} />
+        <StatTile icon="👥" label={t("visited.totalCapacity")} value={stats.capacity.toLocaleString("es-ES")} />
+        <StatTile icon="📜" label={t("visited.oldest")} value={stats.oldest != null ? String(stats.oldest) : "—"} />
+        <StatTile icon="🏗" label={t("visited.newest")} value={stats.newest != null ? String(stats.newest) : "—"} />
       </View>
 
       <TouchableOpacity
@@ -209,7 +211,7 @@ export default function VisitedScreen() {
         disabled={stats.count === 0}
         accessibilityRole="button"
       >
-        <Text style={styles.shareBtnText}>📤 Enviar mis estadísticas y campos</Text>
+        <Text style={styles.shareBtnText}>{t("visited.shareStats")}</Text>
       </TouchableOpacity>
 
       <View style={styles.filtersRow}>
@@ -222,13 +224,13 @@ export default function VisitedScreen() {
               onPress={() => setFilter(f.id)}
               accessibilityRole="button"
             >
-              <Text style={[styles.chipText, active && styles.chipTextActive]}>{f.label}</Text>
+              <Text style={[styles.chipText, active && styles.chipTextActive]}>{t(f.labelKey)}</Text>
             </TouchableOpacity>
           );
         })}
         <View style={styles.spacer} />
         <TouchableOpacity onPress={handleReset} style={styles.resetBtn} accessibilityRole="button">
-          <Text style={styles.resetText}>Reiniciar</Text>
+          <Text style={styles.resetText}>{t("visited.reset")}</Text>
         </TouchableOpacity>
       </View>
 
@@ -241,7 +243,7 @@ export default function VisitedScreen() {
         return (
           <View key={d.id}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>{d.label}</Text>
+              <Text style={styles.sectionTitle}>{t(d.labelKey)}</Text>
               <Text style={styles.sectionCount}>{done}/{total}</Text>
             </View>
             {list.map(s => {
@@ -272,7 +274,7 @@ export default function VisitedScreen() {
       {stats.count === stats.total && (
         <View style={styles.doneBox}>
           <Text style={styles.doneIcon}>🏆</Text>
-          <Text style={styles.doneText}>¡Enhorabuena! Has visitado todos los campos de MyStadium.</Text>
+          <Text style={styles.doneText}>{t("visited.done")}</Text>
         </View>
       )}
     </ScrollView>

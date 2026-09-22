@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Animated, Easing } from "react-native";
+import { useTranslation } from "react-i18next";
 
 interface CompassProps {
   bearing: number | null;
@@ -12,15 +13,15 @@ const INNER = SIZE - 60;
 const NEEDLE_H = INNER / 2 - 12;
 const NEEDLE_W = 10;
 
-const CARDINALS = [
-  { label: "N", angle: 0, major: true },
-  { label: "NE", angle: 45, major: false },
-  { label: "E", angle: 90, major: true },
-  { label: "SE", angle: 135, major: false },
-  { label: "S", angle: 180, major: true },
-  { label: "SO", angle: 225, major: false },
-  { label: "O", angle: 270, major: true },
-  { label: "NO", angle: 315, major: false },
+const CARDINALS: { key: string; angle: number; major: boolean }[] = [
+  { key: "n", angle: 0, major: true },
+  { key: "ne", angle: 45, major: false },
+  { key: "e", angle: 90, major: true },
+  { key: "se", angle: 135, major: false },
+  { key: "s", angle: 180, major: true },
+  { key: "sw", angle: 225, major: false },
+  { key: "w", angle: 270, major: true },
+  { key: "nw", angle: 315, major: false },
 ];
 
 function shortestRotation(current: number, target: number): number {
@@ -35,6 +36,7 @@ function formatDist(km: number): string {
 }
 
 export default function Compass({ bearing, heading, distance }: CompassProps) {
+  const { t } = useTranslation();
   const roseAnim = useRef(new Animated.Value(0)).current;
   const needleAnim = useRef(new Animated.Value(0)).current;
   const lastRose = useRef(0);
@@ -77,12 +79,12 @@ export default function Compass({ bearing, heading, distance }: CompassProps) {
           {Array.from({ length: 36 }).map((_, i) => (
             <View key={i} style={[styles.tick, i % 9 === 0 ? styles.tickMajor : i % 3 === 0 ? styles.tickMed : styles.tickMin, { transform: [{ rotate: `${i * 10}deg` }, { translateY: -(SIZE / 2 - 5) }] }]} />
           ))}
-          {CARDINALS.map(({ label, angle, major }) => {
+          {CARDINALS.map(({ key, angle, major }) => {
             const rad = (angle * Math.PI) / 180;
             const r = SIZE / 2 - 18;
             return (
-              <View key={label} style={[styles.cardinalWrap, { transform: [{ translateX: r * Math.sin(rad) }, { translateY: -r * Math.cos(rad) }] }]}>
-                <Text style={[styles.cardinal, major ? styles.cardinalMajor : styles.cardinalMinor]}>{label}</Text>
+              <View key={key} style={[styles.cardinalWrap, { transform: [{ translateX: r * Math.sin(rad) }, { translateY: -r * Math.cos(rad) }] }]}>
+                <Text style={[styles.cardinal, major ? styles.cardinalMajor : styles.cardinalMinor]}>{t(`compass.${key}`)}</Text>
               </View>
             );
           })}
@@ -92,7 +94,7 @@ export default function Compass({ bearing, heading, distance }: CompassProps) {
           {bearing === null ? (
             <View style={styles.noData}>
               <Text style={styles.noDataIcon}>⚽</Text>
-              <Text style={styles.noDataText}>Sin{"\n"}ubicación</Text>
+              <Text style={styles.noDataText}>{t("compass.noLocation")}</Text>
             </View>
           ) : (
             <>
@@ -111,17 +113,17 @@ export default function Compass({ bearing, heading, distance }: CompassProps) {
       {bearing !== null && (
         <View style={styles.infoRow}>
           <View style={styles.infoCell}>
-            <Text style={styles.infoLabel}>RUMBO</Text>
+            <Text style={styles.infoLabel}>{t("compass.bearing")}</Text>
             <Text style={styles.infoVal}>{Math.round(bearing)}°</Text>
           </View>
           {distance != null && (
             <View style={[styles.infoCell, styles.infoCellCenter]}>
-              <Text style={styles.infoLabel}>DISTANCIA</Text>
+              <Text style={styles.infoLabel}>{t("compass.distance")}</Text>
               <Text style={styles.infoVal}>{formatDist(distance)}</Text>
             </View>
           )}
           <View style={styles.infoCell}>
-            <Text style={styles.infoLabel}>RELATIVO</Text>
+            <Text style={styles.infoLabel}>{t("compass.relative")}</Text>
             <Text style={styles.infoVal}>{relBearing}°</Text>
           </View>
         </View>

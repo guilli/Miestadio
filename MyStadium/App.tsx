@@ -1,8 +1,9 @@
-import React, { Component, ReactNode } from "react";
+import React, { Component, ReactNode, useEffect } from "react";
 import { StatusBar, Platform, View, Text, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AppNavigator from "./src/navigation/AppNavigator";
+import i18n, { applyLanguagePreference } from "./src/i18n";
 
 interface ErrorState {
   error: Error | null;
@@ -24,11 +25,8 @@ class AppErrorBoundary extends Component<{ children: ReactNode }, ErrorState> {
       return (
         <View style={styles.crashScreen}>
           <Text style={styles.crashIcon}>🏟️</Text>
-          <Text style={styles.crashTitle}>MyStadium no pudo arrancar</Text>
-          <Text style={styles.crashMsg}>
-            Se produjo un error al dibujar la pantalla.
-            {"\n"}Reinicia la app para volver a intentarlo.
-          </Text>
+          <Text style={styles.crashTitle}>{i18n.t("app.crashTitle")}</Text>
+          <Text style={styles.crashMsg}>{i18n.t("app.crashMsg")}</Text>
         </View>
       );
     }
@@ -37,6 +35,10 @@ class AppErrorBoundary extends Component<{ children: ReactNode }, ErrorState> {
 }
 
 export default function App(): React.JSX.Element {
+  useEffect(() => {
+    applyLanguagePreference();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <StatusBar

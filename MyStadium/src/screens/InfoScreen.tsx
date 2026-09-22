@@ -1,54 +1,82 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
+import i18n, { SUPPORTED_LANGUAGES, getAppLanguage, setAppLanguage } from "../i18n";
 
-const FEATURES = [
-  { icon: "🧭", title: "Brújula al estadio", desc: "Selecciona un equipo y la brújula apuntará en tiempo real hacia su estadio, mostrando rumbo y distancia desde tu posición." },
-  { icon: "📋", title: "Ficha del estadio", desc: "Consulta nombre, equipo, ciudad, liga, aforo y año de inauguración de cada estadio." },
-  { icon: "🧠", title: "Quiz de campos", desc: "Pon a prueba tus conocimientos: se muestra el estadio y debes elegir el equipo correcto." },
-  { icon: "✅", title: "Campos visitados", desc: "Marca los campos en los que has estado y consulta tus estadísticas: progreso, ciudades, aforo y más." },
-  { icon: "📲", title: "Compartir resultados", desc: "Al terminar el quiz puedes compartir tu puntuación por cualquier app de mensajería." },
+const FEATURES: { icon: string; titleKey: string; descKey: string }[] = [
+  { icon: "🧭", titleKey: "info.features.compass.title", descKey: "info.features.compass.desc" },
+  { icon: "📋", titleKey: "info.features.card.title", descKey: "info.features.card.desc" },
+  { icon: "🧠", titleKey: "info.features.quiz.title", descKey: "info.features.quiz.desc" },
+  { icon: "✅", titleKey: "info.features.visited.title", descKey: "info.features.visited.desc" },
+  { icon: "📲", titleKey: "info.features.share.title", descKey: "info.features.share.desc" },
 ];
 
 export default function InfoScreen() {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
+  const currentLang = getAppLanguage();
+
   return (
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 32 }]} showsVerticalScrollIndicator={false}>
         <View style={styles.hero}>
           <Text style={styles.heroIcon}>🏟</Text>
           <Text style={styles.heroTitle}>MyStadium</Text>
-          <Text style={styles.heroVersion}>Versión 1.0</Text>
-          <Text style={styles.heroTagline}>La app para los amantes del fútbol español.{"\n"}Localiza estadios, aprende y compite con amigos.</Text>
+          <Text style={styles.heroVersion}>{t("info.heroVersion")}</Text>
+          <Text style={styles.heroTagline}>{t("info.heroTagline")}</Text>
         </View>
 
-        <Text style={styles.sectionTitle}>¿Qué hace MyStadium?</Text>
+        <Text style={styles.sectionTitle}>{t("info.whatDoes")}</Text>
         {FEATURES.map(f => (
-          <View key={f.title} style={styles.featureCard}>
+          <View key={f.titleKey} style={styles.featureCard}>
             <Text style={styles.featureIcon}>{f.icon}</Text>
             <View style={styles.featureTexts}>
-              <Text style={styles.featureTitle}>{f.title}</Text>
-              <Text style={styles.featureDesc}>{f.desc}</Text>
+              <Text style={styles.featureTitle}>{t(f.titleKey)}</Text>
+              <Text style={styles.featureDesc}>{t(f.descKey)}</Text>
             </View>
           </View>
         ))}
 
-        <Text style={styles.sectionTitle}>Cómo funciona la brújula</Text>
+        <Text style={styles.sectionTitle}>{t("info.howCompass")}</Text>
         <View style={styles.infoBox}>
-          <Text style={styles.infoBoxText}>Usa el GPS del móvil para conocer tu posición y el magnetómetro para detectar hacia dónde apuntas. Con ambos datos calcula el rumbo exacto hasta el estadio elegido.{"\n\n"}Necesita permiso de ubicación para funcionar.</Text>
+          <Text style={styles.infoBoxText}>{t("info.howCompassText")}</Text>
         </View>
 
-        <Text style={styles.sectionTitle}>Estadios cubiertos</Text>
+        <Text style={styles.sectionTitle}>{t("info.stadiumsCovered")}</Text>
         <View style={styles.infoBox}>
-          <Text style={styles.infoBoxText}>MyStadium incluye los estadios de los 20 equipos de Primera División y los 20 de Segunda División de la temporada 2025-26 del fútbol español.</Text>
+          <Text style={styles.infoBoxText}>{t("info.stadiumsCoveredText")}</Text>
         </View>
 
-        <Text style={styles.sectionTitle}>Partners</Text>
+        <Text style={styles.sectionTitle}>{t("info.partners")}</Text>
         <View style={styles.infoBox}>
-          <Text style={styles.infoBoxText}>Xavier Solé (Partner) i Guillem Polinyà (Partner)</Text>
+          <Text style={styles.infoBoxText}>{t("info.partnersText")}</Text>
         </View>
 
-        <Text style={styles.footer}>© 2025 MyStadium · Hecho con ❤️ para el fútbol</Text>
+        <Text style={styles.sectionTitle}>{t("info.languageSection")}</Text>
+        <View style={styles.infoBox}>
+          <Text style={styles.infoBoxText}>{t("info.languageSub")}</Text>
+          <View style={styles.langChips}>
+            {SUPPORTED_LANGUAGES.map(code => {
+              const active = currentLang === code;
+              return (
+                <TouchableOpacity
+                  key={code}
+                  style={[styles.langChip, active && styles.langChipActive]}
+                  onPress={() => setAppLanguage(code)}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: active }}
+                >
+                  <Text style={[styles.langChipText, active && styles.langChipTextActive]}>
+                    {i18n.t(`languages.${code}`)}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+
+        <Text style={styles.footer}>{t("info.footer")}</Text>
       </ScrollView>
     </View>
   );
@@ -70,5 +98,10 @@ const styles = StyleSheet.create({
   featureDesc: { fontSize: 13, color: "#666", lineHeight: 20 },
   infoBox: { backgroundColor: "#fff", borderRadius: 12, padding: 16, marginBottom: 16, borderLeftWidth: 4, borderLeftColor: "#2E7D32" },
   infoBoxText: { fontSize: 14, color: "#444", lineHeight: 22 },
+  langChips: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 12 },
+  langChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: "#F1F8E9", borderWidth: 1, borderColor: "#C8E6C9" },
+  langChipActive: { backgroundColor: "#2E7D32", borderColor: "#2E7D32" },
+  langChipText: { fontSize: 13, fontWeight: "700", color: "#2E7D32" },
+  langChipTextActive: { color: "#fff" },
   footer: { textAlign: "center", fontSize: 12, color: "#999", marginTop: 8 },
 });

@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { stadiums as allStadiums } from "../data/stadiums";
 import { Country, Division, StadiumWithDistance } from "../types";
 import useLocation from "../hooks/useLocation";
@@ -9,14 +10,15 @@ import useMagnetometer from "../hooks/useMagnetometer";
 import Compass from "../components/Compass";
 
 type LeagueId = "spain_primera" | "spain_segunda";
-const LEAGUES: { id: LeagueId; label: string; country: Country; division: Division }[] = [
-  { id: "spain_primera", label: "España · 1ª División", country: "España", division: "Primera" },
-  { id: "spain_segunda", label: "España · 2ª División", country: "España", division: "Segunda" },
+const LEAGUES: { id: LeagueId; labelKey: string; country: Country; division: Division }[] = [
+  { id: "spain_primera", labelKey: "home.leagueOption.espana1", country: "España", division: "Primera" },
+  { id: "spain_segunda", labelKey: "home.leagueOption.espana2", country: "España", division: "Segunda" },
 ];
 const PLACEHOLDER = "__none__";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const { userLocation, locationError, enrichStadiums, refreshLocation } = useLocation();
   const heading = useMagnetometer();
 
@@ -40,18 +42,18 @@ export default function HomeScreen() {
     <View style={styles.screen}>
       <View style={styles.selectorsRow}>
         <View style={styles.pickerWrapRow}>
-          <Text style={styles.pickerLabel}>Liga</Text>
+          <Text style={styles.pickerLabel}>{t("home.league")}</Text>
           <View style={styles.pickerBox}>
             <Picker selectedValue={leagueId} onValueChange={v => setLeagueId(v as LeagueId)} style={styles.picker} dropdownIconColor="#2E7D32">
-              {LEAGUES.map(l => <Picker.Item key={l.id} label={l.label} value={l.id} style={styles.pickerItem} />)}
+              {LEAGUES.map(l => <Picker.Item key={l.id} label={t(l.labelKey)} value={l.id} style={styles.pickerItem} />)}
             </Picker>
           </View>
         </View>
         <View style={styles.pickerWrapRow}>
-          <Text style={styles.pickerLabel}>Equipo</Text>
+          <Text style={styles.pickerLabel}>{t("home.team")}</Text>
           <View style={styles.pickerBox}>
             <Picker selectedValue={teamId} onValueChange={v => setTeamId(v as string)} style={styles.picker} dropdownIconColor="#2E7D32" mode="dropdown">
-              <Picker.Item label="— Elige un equipo —" value={PLACEHOLDER} color="#999" style={styles.pickerItem} />
+              <Picker.Item label={t("home.chooseTeam")} value={PLACEHOLDER} color="#999" style={styles.pickerItem} />
               {filteredStadiums.map(s => <Picker.Item key={s.teamId} label={s.teamName} value={s.teamId} style={styles.pickerItem} />)}
             </Picker>
           </View>
@@ -60,39 +62,43 @@ export default function HomeScreen() {
 
       {locationError && (
         <TouchableOpacity style={styles.errorBanner} onPress={refreshLocation}>
-          <Text style={styles.errorText}>⚠️ {locationError}</Text>
-          <Text style={styles.errorRetry}>Toca para reintentar</Text>
+          <Text style={styles.errorText}>⚠️ {t(locationError)}</Text>
+          <Text style={styles.errorRetry}>{t("home.retry")}</Text>
         </TouchableOpacity>
       )}
 
       {!userLocation && !locationError && (
         <View style={styles.loadingRow}>
           <ActivityIndicator size="small" color="#2E7D32" />
-          <Text style={styles.loadingText}>Obteniendo ubicación…</Text>
+          <Text style={styles.loadingText}>{t("home.gettingLocation")}</Text>
         </View>
       )}
 
       {stadium === null ? (
         <View style={styles.empty}>
           <Text style={styles.emptyIcon}>🧭</Text>
-          <Text style={styles.emptyText}>Selecciona una liga y un equipo{"\n"}para ver la brújula y los datos del estadio</Text>
+          <Text style={styles.emptyText}>{t("home.empty")}</Text>
         </View>
       ) : (
         <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 32 }]} showsVerticalScrollIndicator={false}>
           <View style={styles.compassSection}>
-            <Text style={styles.sectionTitle}>Dirección al {stadium.name}</Text>
+            <Text style={styles.sectionTitle}>{t("home.directionTo", { name: stadium.name })}</Text>
             <Compass bearing={stadium.bearing} heading={heading} distance={stadium.distance} />
           </View>
           <View style={styles.card}>
             <Text style={styles.cardStadiumName}>{stadium.name}</Text>
             <Text style={styles.cardTeam}>{stadium.teamName}</Text>
             <View style={styles.divider} />
-            <Row icon="📍" label="Ciudad" value={stadium.city} />
-            <Row icon="🏆" label="Liga" value={stadium.division === "Primera" ? "Primera División" : "Segunda División"} />
-            <Row icon="👥" label="Aforo" value={stadium.capacity.toLocaleString("es-ES") + " espectadores"} />
-            <Row icon="📅" label="Año" value={`Inaugurado en ${stadium.yearBuilt}`} />
+            <Row icon="📍" label={t("home.city")} value={stadium.city} />
+            <Row icon="🏆" label={t("home.league")} value={t(`home.leagueLabel.${stadium.division.toLowerCase()}`)} />
+            <Row icon="👥" label={t("home.capacity")} value={stadium.capacity.toLocaleString("es-ES") + ` ${t("home.spectators", { count: "" }).trim()}`} />
+            <Row icon="📅" label={t("home.year")} value={t("home.inaugurated", { year: stadium.yearBuilt })} />
             {stadium.distance != null && (
-              <Row icon="📏" label="Distancia" value={stadium.distance < 1 ? `${Math.round(stadium.distance * 1000)} m desde tu posición` : `${stadium.distance.toFixed(1)} km desde tu posición`} />
+              <Row icon="📏" label={t("compass.distance")} value={
+                stadium.distance < 1
+                  ? t("home.distanceM", { count: Math.round(stadium.distance * 1000) })
+                  : t("home.distanceKm", { count: stadium.distance.toFixed(1) })
+              } />
             )}
           </View>
         </ScrollView>

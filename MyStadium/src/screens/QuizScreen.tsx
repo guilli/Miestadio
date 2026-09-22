@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Share, Linking } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import { stadiums as allStadiums } from "../data/stadiums";
 import { Stadium, Division } from "../types";
 
@@ -49,6 +50,7 @@ interface Wrong {
 
 export default function QuizScreen(): React.JSX.Element | null {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const [gameState, setGameState] = useState<"setup" | "playing" | "finished">("setup");
   const [division, setDivision] = useState<DivFilter>("Primera");
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -107,23 +109,22 @@ export default function QuizScreen(): React.JSX.Element | null {
   }, []);
 
   const handleShare = useCallback(() => {
-    const msg = `🧠 MyStadium: he acertado ${score}/${TOTAL} preguntas.\n\n${wrongs.length > 0 ? `Errores:\n${wrongs.map(w => `• ${w.stadium}: elegí "${w.chosen}", era "${w.correct}"`).join("\n")}` : "¡Perfecto! 🎉"}`;
+    const msg = `${t("quiz.shareTitle", { score, total: TOTAL })}\n\n${wrongs.length > 0 ? `${t("quiz.shareErrors")}\n${wrongs.map(w => t("quiz.shareWrongLine", { stadium: w.stadium, chosen: w.chosen, correct: w.correct })).join("\n")}` : t("quiz.sharePerfect")}`;
     const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(msg)}`;
     Linking.openURL(whatsappUrl).catch(() => Share.share({ message: msg }));
-  }, [score, wrongs]);
+  }, [score, wrongs, t]);
 
   if (gameState === "setup") {
     return (
       <View style={styles.screen}>
         <ScrollView contentContainerStyle={[styles.setupContent, { paddingBottom: insets.bottom + 40 }]}>
           <View style={styles.setupCard}>
-            <Text style={styles.setupTitle}>Quiz de Estadios</Text>
+            <Text style={styles.setupTitle}>{t("quiz.setupTitle")}</Text>
             <Text style={styles.setupDesc}>
-              Te mostramos un estadio y debes adivinar qué equipo juega ahí.
-              {"\n\n"}¡{TOTAL} preguntas te esperan!
+              {t("quiz.setupDesc", { count: TOTAL })}
             </Text>
             
-            <Text style={styles.divLabel}>División</Text>
+            <Text style={styles.divLabel}>{t("quiz.division")}</Text>
             <View style={styles.pickerWrap}>
               <Picker 
                 selectedValue={division} 
@@ -131,14 +132,14 @@ export default function QuizScreen(): React.JSX.Element | null {
                 style={styles.picker}
                 dropdownIconColor="#2E7D32"
               >
-                <Picker.Item label="Primera División" value="Primera" />
-                <Picker.Item label="Segunda División" value="Segunda" />
-                <Picker.Item label="Todas las divisiones" value="todas" />
+                <Picker.Item label={t("quiz.divisionOptions.primera")} value="Primera" />
+                <Picker.Item label={t("quiz.divisionOptions.segunda")} value="Segunda" />
+                <Picker.Item label={t("quiz.divisionOptions.all")} value="todas" />
               </Picker>
             </View>
             
             <TouchableOpacity style={styles.startBtn} onPress={handleStart}>
-              <Text style={styles.startTxt}>Empezar Quiz</Text>
+              <Text style={styles.startTxt}>{t("quiz.start")}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -155,17 +156,17 @@ export default function QuizScreen(): React.JSX.Element | null {
           <TouchableOpacity 
             style={styles.exitBtn} 
             onPress={() => Alert.alert(
-              "Abandonar", 
-              "¿Seguro? Se perderá el progreso.", 
+              t("quiz.abandon"), 
+              t("quiz.abandonMsg"), 
               [
-                { text: "Cancelar", style: "cancel" }, 
-                { text: "Salir", style: "destructive", onPress: () => handleReset() }
+                { text: t("quiz.cancel"), style: "cancel" }, 
+                { text: t("quiz.exit"), style: "destructive", onPress: () => handleReset() }
               ]
             )}
           >
             <Text style={styles.exitTxt}>✕</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Pregunta {index + 1} / {TOTAL}</Text>
+          <Text style={styles.headerTitle}>{t("quiz.questionNum", { current: index + 1, total: TOTAL })}</Text>
           <Text style={styles.scoreTxt}>{score} ✓</Text>
         </View>
         
@@ -176,15 +177,15 @@ export default function QuizScreen(): React.JSX.Element | null {
         
         <ScrollView contentContainerStyle={[styles.playContent, { paddingBottom: insets.bottom + 40 }]}>
           <View style={styles.questionCard}>
-            <Text style={styles.questionTitle}>¿Qué equipo juega en este estadio?</Text>
+            <Text style={styles.questionTitle}>{t("quiz.questionTitle")}</Text>
             <Text style={styles.stadiumName}>{current.stadium.name}</Text>
             <Text style={styles.stadiumInfo}>
-              {current.stadium.capacity.toLocaleString()} espectadores
+              {t("quiz.spectators", { count: current.stadium.capacity.toLocaleString() })}
             </Text>
           </View>
 
           <View style={styles.answerBox}>
-            <Text style={styles.answerBoxLabel}>Tu respuesta</Text>
+            <Text style={styles.answerBoxLabel}>{t("quiz.yourAnswer")}</Text>
             <View style={styles.answerPickerWrap}>
               <Picker 
                 selectedValue={selected} 
@@ -194,7 +195,7 @@ export default function QuizScreen(): React.JSX.Element | null {
                 dropdownIconColor="#2E7D32" 
                 mode="dropdown"
               >
-                <Picker.Item label="- Selecciona el equipo -" value="__none__" color="#999" />
+                <Picker.Item label={t("quiz.selectTeam")} value="__none__" color="#999" />
                 {current.options.map(opt => 
                   <Picker.Item key={opt} label={opt} value={opt} />
                 )}
@@ -205,7 +206,7 @@ export default function QuizScreen(): React.JSX.Element | null {
           {answered && (
             <View style={[styles.feedbackBox, selected === current.correct ? styles.feedbackOk : styles.feedbackKo]}>
               <Text style={styles.feedbackText}>
-                {selected === current.correct ? "✅ ¡Correcto!" : `❌ Era: ${current.correct}`}
+                {selected === current.correct ? t("quiz.correct") : t("quiz.wrongAnswer", { team: current.correct })}
               </Text>
             </View>
           )}
@@ -216,11 +217,11 @@ export default function QuizScreen(): React.JSX.Element | null {
               onPress={handleAnswer} 
               disabled={selected === "__none__"}
             >
-              <Text style={styles.actionTxt}>Responder</Text>
+              <Text style={styles.actionTxt}>{t("quiz.answer")}</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity style={[styles.actionBtn, styles.actionBtnEnabled]} onPress={handleNext}>
-              <Text style={styles.actionTxt}>{index + 1 >= TOTAL ? "Ver Resultado" : "Siguiente"}</Text>
+              <Text style={styles.actionTxt}>{index + 1 >= TOTAL ? t("quiz.seeResult") : t("quiz.next")}</Text>
             </TouchableOpacity>
           )}
         </ScrollView>
@@ -233,18 +234,18 @@ export default function QuizScreen(): React.JSX.Element | null {
       <View style={styles.screen}>
         <ScrollView contentContainerStyle={[styles.finishedContent, { paddingBottom: insets.bottom + 40 }]}>
           <View style={styles.resultCard}>
-            <Text style={styles.resultTitle}>¡Quiz Completado!</Text>
+            <Text style={styles.resultTitle}>{t("quiz.finishedTitle")}</Text>
             <Text style={styles.resultScore}>{score} / {TOTAL}</Text>
-            <Text style={styles.resultPercent}>{Math.round((score / TOTAL) * 100)}% correctas</Text>
+            <Text style={styles.resultPercent}>{t("quiz.percent", { percent: Math.round((score / TOTAL) * 100) })}</Text>
             
             {wrongs.length > 0 && (
               <>
-                <Text style={styles.wrongsTitle}>Errores:</Text>
+                <Text style={styles.wrongsTitle}>{t("quiz.errors")}</Text>
                 {wrongs.map((w, i) => (
                   <View key={i} style={styles.wrongItem}>
                     <Text style={styles.wrongStadium}>{w.stadium}</Text>
-                    <Text style={styles.wrongDetail}>Elegiste: "{w.chosen}"</Text>
-                    <Text style={styles.wrongDetail}>Era: "{w.correct}"</Text>
+                    <Text style={styles.wrongDetail}>{t("quiz.chose", { team: w.chosen })}</Text>
+                    <Text style={styles.wrongDetail}>{t("quiz.was", { team: w.correct })}</Text>
                   </View>
                 ))}
               </>
@@ -252,10 +253,10 @@ export default function QuizScreen(): React.JSX.Element | null {
             
             <View style={styles.actionsRow}>
               <TouchableOpacity style={styles.secondaryBtn} onPress={handleShare}>
-                <Text style={styles.secondaryTxt}>Compartir</Text>
+                <Text style={styles.secondaryTxt}>{t("quiz.share")}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.primaryBtn} onPress={handleReset}>
-                <Text style={styles.primaryTxt}>Nuevo Quiz</Text>
+                <Text style={styles.primaryTxt}>{t("quiz.newQuiz")}</Text>
               </TouchableOpacity>
             </View>
           </View>

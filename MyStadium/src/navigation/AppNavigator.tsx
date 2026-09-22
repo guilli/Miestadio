@@ -2,6 +2,7 @@ import React from "react";
 import { createBottomTabNavigator, type BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import HomeScreen from "../screens/HomeScreen";
 import QuizScreen from "../screens/QuizScreen";
 import VisitedScreen from "../screens/VisitedScreen";
@@ -10,33 +11,35 @@ import { TabParamList } from "../types";
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
-const TABS: { name: keyof TabParamList; emoji: string; label: string }[] = [
-  { name: "Home", emoji: "🧭", label: "Brújula" },
-  { name: "Quiz", emoji: "🧠", label: "Quiz" },
-  { name: "Visited", emoji: "✅", label: "Campos" },
-  { name: "Info", emoji: "ℹ️", label: "Ayuda" },
+const TABS: { name: keyof TabParamList; emoji: string; labelKey: string }[] = [
+  { name: "Home", emoji: "🧭", labelKey: "tabs.home" },
+  { name: "Quiz", emoji: "🧠", labelKey: "tabs.quiz" },
+  { name: "Visited", emoji: "✅", labelKey: "tabs.visited" },
+  { name: "Info", emoji: "ℹ️", labelKey: "tabs.info" },
 ];
 
 function AppTabBar({ state, navigation }: BottomTabBarProps) {
+  const { t } = useTranslation();
   return (
     <SafeAreaView edges={["top"]} style={styles.barSafe}>
       <View style={styles.bar}>
         <View style={styles.titleBox}>
           <Text style={styles.title}>🏟 MyStadium</Text>
-          <Text style={styles.titleSub}>Campos de fútbol · España</Text>
+          <Text style={styles.titleSub}>{t("tabs.subtitle")}</Text>
         </View>
         <View style={styles.buttons}>
           {TABS.map((tab, i) => {
             const focused = state.index === i;
+            const label = t(tab.labelKey);
             return (
               <TouchableOpacity
                 key={tab.name}
                 style={[styles.btn, focused && styles.btnActive]}
                 onPress={() => navigation.navigate(tab.name)}
-                accessibilityLabel={tab.label}
+                accessibilityLabel={label}
               >
                 <Text style={[styles.btnEmoji, focused && styles.btnEmojiActive]}>{tab.emoji}</Text>
-                <Text style={[styles.btnLabel, focused && styles.btnLabelActive]}>{tab.label}</Text>
+                <Text style={[styles.btnLabel, focused && styles.btnLabelActive]}>{label}</Text>
               </TouchableOpacity>
             );
           })}
@@ -46,10 +49,12 @@ function AppTabBar({ state, navigation }: BottomTabBarProps) {
   );
 }
 
+const renderAppTabBar = (props: BottomTabBarProps) => <AppTabBar {...props} />;
+
 export default function AppNavigator() {
   return (
     <Tab.Navigator
-      tabBar={AppTabBar}
+      tabBar={renderAppTabBar}
       screenOptions={{
         headerShown: false,
         tabBarPosition: "top",
