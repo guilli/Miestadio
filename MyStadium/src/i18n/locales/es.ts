@@ -9,7 +9,6 @@ export default {
     quiz: "Quiz",
     visited: "Campos",
     info: "Ayuda",
-    subtitle: "Campos de fútbol · España",
   },
   compass: {
     noLocation: "Sin\nubicación",

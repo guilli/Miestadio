@@ -24,8 +24,7 @@ function AppTabBar({ state, navigation }: BottomTabBarProps) {
     <SafeAreaView edges={["top"]} style={styles.barSafe}>
       <View style={styles.bar}>
         <View style={styles.titleBox}>
-          <Text style={styles.title}>🏟 MyStadium</Text>
-          <Text style={styles.titleSub}>{t("tabs.subtitle")}</Text>
+          <Text style={styles.title}>MyStadium</Text>
         </View>
         <View style={styles.buttons}>
           {TABS.map((tab, i) => {
@@ -84,7 +83,6 @@ const styles = StyleSheet.create({
   },
   titleBox: { flex: 1 },
   title: { fontSize: 21, fontWeight: "900", color: "#fff", letterSpacing: 0.5 },
-  titleSub: { fontSize: 11, color: "#A5D6A7", marginTop: 1 },
   buttons: { flexDirection: "row", gap: 6 },
   btn: {
     alignItems: "center",
