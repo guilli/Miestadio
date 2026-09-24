@@ -129,7 +129,7 @@ export default {
   info: {
     heroVersion: "Version 1.0",
     heroTagline:
-      "The app for Spanish football lovers.\nFind stadiums, learn and compete with friends.",
+      "The app for football lovers.\nFind stadiums, learn and compete with friends.",
     whatDoes: "What does MyStadium do?",
     features: {
       compass: {
@@ -158,7 +158,7 @@ export default {
       "It uses your phone GPS to know your position and the magnetometer to detect where you are pointing. With both it calculates the exact bearing to the chosen stadium.\n\nLocation permission is required to work.",
     stadiumsCovered: "Stadiums covered",
     stadiumsCoveredText:
-      "MyStadium includes the stadiums of the 20 First Division teams and the 20 Second Division teams of the 2025-26 Spanish football season.",
+      "MyStadium includes the 2026-27 season stadiums: the 20 First Division teams and the 22 Second Division teams of Spanish football, plus the top leagues of England, France, Germany and Portugal. 116 stadiums in total.",
     partners: "Partners",
     partnersText: "Xavier Solé (Partner) and Guillem Polinyà (Partner)",
     footer: "© 2025 MyStadium · Made with ❤️ for football",

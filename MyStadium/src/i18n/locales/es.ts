@@ -132,7 +132,7 @@ export default {
   info: {
     heroVersion: "Versión 1.0",
     heroTagline:
-      "La app para los amantes del fútbol español.\nLocaliza estadios, aprende y compite con amigos.",
+      "La app para los amantes del fútbol.\nLocaliza estadios, aprende y compite con amigos.",
     whatDoes: "¿Qué hace MyStadium?",
     features: {
       compass: {
@@ -161,7 +161,7 @@ export default {
       "Usa el GPS del móvil para conocer tu posición y el magnetómetro para detectar hacia dónde apuntas. Con ambos datos calcula el rumbo exacto hasta el estadio elegido.\n\nNecesita permiso de ubicación para funcionar.",
     stadiumsCovered: "Estadios cubiertos",
     stadiumsCoveredText:
-      "MyStadium incluye los estadios de los 20 equipos de Primera División y los 20 de Segunda División de la temporada 2025-26 del fútbol español.",
+      "MyStadium incluye los estadios de la temporada 2026-27: los 20 equipos de Primera División y los 22 de Segunda División del fútbol español, además de las principales ligas de Inglaterra, Francia, Alemania y Portugal. 116 estadios en total.",
     partners: "Partners",
     partnersText: "Xavier Solé (Partner) y Guillem Polinyà (Partner)",
     footer: "© 2025 MyStadium · Hecho con ❤️ para el fútbol",

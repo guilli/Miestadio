@@ -129,7 +129,7 @@ export default {
   info: {
     heroVersion: "Version 1.0",
     heroTagline:
-      "Die App für Liebhaber des spanischen Fußballs.\nFinde Stadien, lerne und tritt gegen Freunde an.",
+      "Die App für Fußballliebhaber.\nFinde Stadien, lerne und tritt gegen Freunde an.",
     whatDoes: "Was macht MyStadium?",
     features: {
       compass: {
@@ -158,7 +158,7 @@ export default {
       "Er nutzt das GPS des Handys, um deine Position zu ermitteln, und das Magnetometer, um zu erkennen, wohin du zeigst. Mit beiden Daten berechnet er den genauen Kurs zum gewählten Stadion.\n\nDafür ist die Standortberechtigung erforderlich.",
     stadiumsCovered: "Abgedeckte Stadien",
     stadiumsCoveredText:
-      "MyStadium umfasst die Stadien der 20 Erstligisten und der 20 Zweitligisten der Saison 2025-26 des spanischen Fußballs.",
+      "MyStadium umfasst die Stadien der Saison 2026-27: die 20 Erstligisten und die 22 Zweitligisten des spanischen Fußballs sowie die Top-Ligen Englands, Frankreichs, Deutschlands und Portugals. Insgesamt 116 Stadien.",
     partners: "Partner",
     partnersText: "Xavier Solé (Partner) und Guillem Polinyà (Partner)",
     footer: "© 2025 MyStadium · Mit ❤️ für den Fußball gemacht",

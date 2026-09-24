@@ -129,7 +129,7 @@ export default {
   info: {
     heroVersion: "Versió 1.0",
     heroTagline:
-      "L'app per als amants del futbol espanyol.\nLocalitza estadis, aprèn i competeix amb amics.",
+      "L'app per als amants del futbol.\nLocalitza estadis, aprèn i competeix amb amics.",
     whatDoes: "Què fa MyStadium?",
     features: {
       compass: {
@@ -158,7 +158,7 @@ export default {
       "Fes servir el GPS del mòbil per conèixer la teva posició i el magnetòmetre per detectar cap on apuntes. Amb les dues dades calcula el rumb exacte fins a l'estadi triat.\n\nNecessita permís d'ubicació per funcionar.",
     stadiumsCovered: "Estadis coberts",
     stadiumsCoveredText:
-      "MyStadium inclou els estadis dels 20 equips de Primera Divisió i els 20 de Segona Divisió de la temporada 2025-26 del futbol espanyol.",
+      "MyStadium inclou els estadis de la temporada 2026-27: els 20 equips de Primera Divisió i els 22 de Segona Divisió del futbol espanyol, a més de les principals lligues d'Anglaterra, França, Alemanya i Portugal. 116 estadis en total.",
     partners: "Partners",
     partnersText: "Xavier Solé (Partner) i Guillem Polinyà (Partner)",
     footer: "© 2025 MyStadium · Fet amb ❤️ per al futbol",

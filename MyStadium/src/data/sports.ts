@@ -25,6 +25,10 @@ export const SPORTS: SportDef[] = [
     leagues: [
       { id: "spain_primera", label: "España · 1ª División", country: "España", division: "Primera" },
       { id: "spain_segunda", label: "España · 2ª División", country: "España", division: "Segunda" },
+      { id: "england_premier", label: "Inglaterra · Premier League", country: "Inglaterra", division: "Primera" },
+      { id: "france_ligue1", label: "Francia · Ligue 1", country: "Francia", division: "Primera" },
+      { id: "germany_bundesliga", label: "Alemania · Bundesliga", country: "Alemania", division: "Primera" },
+      { id: "portugal_primeira", label: "Portugal · Primeira Liga", country: "Portugal", division: "Primera" },
     ],
   },
   {
@@ -34,8 +38,8 @@ export const SPORTS: SportDef[] = [
     leagues: [
       {
         id: "acb",
-        label: "Liga ACB",
-        teams: ["Real Madrid Baloncesto", "Barça Basket", "Valencia Basket", "Unicaja Málaga", "Cazoo Baskonia", "Gran Canaria", "UCAM Murcia", "Joventut", "Andorra", "Obradoiro"],
+        label: "Liga Endesa",
+        teams: ["Valencia Basket", "Real Madrid Baloncesto", "Barça Basket", "Kosner Baskonia", "ASISA Joventut", "Unicaja Málaga", "UCAM Murcia", "La Laguna Tenerife", "Dreamland Gran Canaria", "Casademont Zaragoza", "BAXI Manresa", "MoraBanc Andorra", "Río Breogán", "iLERNA Lleida", "Recoletas Salud San Pablo Burgos", "Monbus Obradoiro", "Leyma Coruña", "Surne Bilbao"],
       },
       {
         id: "leb_oro",

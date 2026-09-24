@@ -1,5 +1,5 @@
 export type Division = "Primera" | "Segunda";
-export type Country = "España";
+export type Country = "España" | "Inglaterra" | "Francia" | "Alemania" | "Portugal";
 
 export type SportId = "futbol" | "baloncesto" | "rugby" | "sumo" | "futbolamericano";
 
