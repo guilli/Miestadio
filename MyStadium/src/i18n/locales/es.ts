@@ -26,7 +26,6 @@ export default {
   },
   home: {
     sport: "Deporte",
-    previewVariant: "Vista previa selector: {{variant}} · toca para cambiar",
     league: "Liga",
     team: "Equipo",
     chooseTeam: "— Elige un equipo —",
@@ -35,8 +34,7 @@ export default {
     empty:
       "Selecciona una liga y un equipo\npara ver la brújula y los datos del estadio",
     soonTitle: "{{sport}} próximamente",
-    soonText:
-      "Elige un deporte para comparar los formatos de selector.\nLos recintos de {{sport}} llegarán en una próxima versión.",
+    soonText: "Los recintos de {{sport}} llegarán en una próxima versión.",
     directionTo: "Dirección al {{name}}",
     city: "Ciudad",
     capacity: "Aforo",

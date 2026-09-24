@@ -12,8 +12,6 @@ import Compass from "../components/Compass";
 
 const PLACEHOLDER = "__none__";
 
-type Variant = "A" | "B" | "C";
-
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
@@ -23,7 +21,6 @@ export default function HomeScreen() {
   const [sportId, setSportId] = useState<SportId>("futbol");
   const [leagueId, setLeagueId] = useState<string>("spain_primera");
   const [teamId, setTeamId] = useState<string>(PLACEHOLDER);
-  const [variant, setVariant] = useState<Variant>("A");
 
   const sport = useMemo(() => SPORTS.find(s => s.id === sportId) ?? SPORTS[0], [sportId]);
   const isFootball = sport.id === "futbol";
@@ -72,74 +69,30 @@ export default function HomeScreen() {
     setTeamId(PLACEHOLDER);
   };
 
-  const cycleVariant = () => setVariant(v => (v === "A" ? "B" : v === "B" ? "C" : "A"));
-
   return (
     <View style={styles.screen}>
-      {/* ── Barra de vista previa (temporal) ── */}
-      <TouchableOpacity style={styles.previewBar} onPress={cycleVariant} accessibilityRole="button">
-        <Text style={styles.previewText}>{t("home.previewVariant", { variant })}</Text>
-      </TouchableOpacity>
-
       <View style={styles.selectorsRow}>
-        {/* Selector de deporte (3 formatos) */}
+        {/* Selector de deporte · chips */}
         <View style={styles.pickerWrapRow}>
           <Text style={styles.pickerLabel}>{t("home.sport")}</Text>
-          {variant === "A" && (
-            <View style={styles.chips}>
-              {SPORTS.map(s => {
-                const active = s.id === sport.id;
-                return (
-                  <TouchableOpacity
-                    key={s.id}
-                    style={[styles.chip, active && styles.chipActive]}
-                    onPress={() => handleSportChange(s.id)}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: active }}
-                  >
-                    <Text style={[styles.chipText, active && styles.chipTextActive]}>
-                      {s.icon} {s.label}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          )}
-
-          {variant === "B" && (
-            <View style={styles.pickerBox}>
-              <Picker
-                selectedValue={sport.id}
-                onValueChange={v => handleSportChange(v as SportId)}
-                style={styles.picker}
-                dropdownIconColor="#2E7D32"
-              >
-                {SPORTS.map(s => (
-                  <Picker.Item key={s.id} label={`${s.icon} ${s.label}`} value={s.id} style={styles.pickerItem} />
-                ))}
-              </Picker>
-            </View>
-          )}
-
-          {variant === "C" && (
-            <View style={styles.sportGrid}>
-              {SPORTS.map(s => {
-                const active = s.id === sport.id;
-                return (
-                  <TouchableOpacity
-                    key={s.id}
-                    style={[styles.tile, active && styles.tileActive]}
-                    onPress={() => handleSportChange(s.id)}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: active }}
-                  >
-                    <Text style={styles.tileIcon}>{s.icon}</Text>
-                    <Text style={[styles.tileName, active && styles.tileNameActive]}>{s.label}</Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          )}
+          <View style={styles.chips}>
+            {SPORTS.map(s => {
+              const active = s.id === sport.id;
+              return (
+                <TouchableOpacity
+                  key={s.id}
+                  style={[styles.chip, active && styles.chipActive]}
+                  onPress={() => handleSportChange(s.id)}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: active }}
+                >
+                  <Text style={[styles.chipText, active && styles.chipTextActive]}>
+                    {s.icon} {s.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </View>
 
         {/* Selector de Liga */}
@@ -254,9 +207,6 @@ const rowStyles = StyleSheet.create({
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#F0F4F0" },
 
-  previewBar: { backgroundColor: "#FFF8E1", paddingVertical: 6, paddingHorizontal: 12, borderBottomWidth: 1, borderBottomColor: "#FFE082" },
-  previewText: { fontSize: 12, color: "#B26A00", fontWeight: "700", textAlign: "center", letterSpacing: 0.2 },
-
   selectorsRow: { backgroundColor: "#fff", paddingHorizontal: 12, paddingTop: 8, paddingBottom: Platform.OS === "ios" ? 8 : 6, borderBottomWidth: 1, borderBottomColor: "#E0E0E0", gap: 6 },
   pickerWrapRow: { width: "100%" },
   pickerLabel: { fontSize: 11, color: "#777", fontWeight: "700", marginLeft: 4, marginBottom: 3, textTransform: "uppercase", letterSpacing: 0.3 },
@@ -264,20 +214,11 @@ const styles = StyleSheet.create({
   picker: { ...(Platform.OS === "ios" ? { height: 44 } : {}), fontSize: 15, fontWeight: "600", color: "#1B5E20", width: "100%" },
   pickerItem: { fontSize: 15 },
 
-  // Variante A · Chips
   chips: { flexDirection: "row", flexWrap: "wrap", gap: 6, paddingVertical: 2 },
   chip: { paddingHorizontal: 12, paddingVertical: 7, borderRadius: 999, backgroundColor: "#fff", borderWidth: 1.5, borderColor: "#C8E6C9" },
   chipActive: { backgroundColor: "#1B5E20", borderColor: "#1B5E20" },
   chipText: { fontSize: 13, fontWeight: "700", color: "#2E7D32" },
   chipTextActive: { color: "#fff" },
-
-  // Variante C · Cuadrícula
-  sportGrid: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  tile: { width: "31%", flexGrow: 1, backgroundColor: "#fff", borderWidth: 1.5, borderColor: "#C8E6C9", borderRadius: 12, paddingVertical: 10, alignItems: "center" },
-  tileActive: { backgroundColor: "#1B5E20", borderColor: "#1B5E20" },
-  tileIcon: { fontSize: 24, marginBottom: 3 },
-  tileName: { fontSize: 10, fontWeight: "700", color: "#2E7D32" },
-  tileNameActive: { color: "#fff" },
 
   errorBanner: { backgroundColor: "#FFF3E0", borderLeftWidth: 4, borderLeftColor: "#FF6F00", padding: 12, margin: 12, borderRadius: 8 },
   errorText: { color: "#E65100", fontSize: 13 },
