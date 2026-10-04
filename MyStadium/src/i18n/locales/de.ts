@@ -25,6 +25,7 @@ export default {
     nw: "NW",
   },
   home: {
+    sport: "Sportart",
     league: "Liga",
     team: "Mannschaft",
     chooseTeam: "— Wähle eine Mannschaft —",
@@ -40,11 +41,6 @@ export default {
     spectators: "{{count}} Zuschauer",
     distanceM: "{{count}} m von deiner Position",
     distanceKm: "{{count}} km von deiner Position",
-    leagueLabel: { primera: "Erste Liga", segunda: "Zweite Liga" },
-    leagueOption: {
-      espana1: "Spanien · 1. Liga",
-      espana2: "Spanien · 2. Liga",
-    },
     countrySpain: "Spanien",
   },
   location: {
@@ -62,12 +58,8 @@ export default {
     setupTitle: "Stadion-Quiz",
     setupDesc:
       "Wir zeigen dir ein Stadion und du musst erraten, welche Mannschaft dort spielt.\n\n{{count}} Fragen erwarten dich!",
-    division: "Liga",
-    divisionOptions: {
-      primera: "Erste Liga",
-      segunda: "Zweite Liga",
-      all: "Alle Ligen",
-    },
+    league: "Liga",
+    leagueOptions: { all: "Alle Ligen" },
     start: "Quiz starten",
     abandon: "Verlassen",
     abandonMsg: "Bist du sicher? Dein Fortschritt geht verloren.",
@@ -108,9 +100,6 @@ export default {
     loading: "Deine Markierungen werden geladen…",
     heroTitle: "Stadien, die du besucht hast",
     completed: "{{percent}} % abgeschlossen",
-    divisionPrimera: "⭐ Erste",
-    divisionSegunda: "🌟 Zweite",
-    divisionOption: { primera: "Erste Liga", segunda: "Zweite Liga" },
     cities: "Städte",
     totalCapacity: "Gesamtkapazität",
     oldest: "Ältestes",
@@ -156,9 +145,9 @@ export default {
     howCompass: "So funktioniert der Kompass",
     howCompassText:
       "Er nutzt das GPS des Handys, um deine Position zu ermitteln, und das Magnetometer, um zu erkennen, wohin du zeigst. Mit beiden Daten berechnet er den genauen Kurs zum gewählten Stadion.\n\nDafür ist die Standortberechtigung erforderlich.",
-    stadiumsCovered: "Abgedeckte Stadien",
+    stadiumsCovered: "Abgedeckte Spielstätten",
     stadiumsCoveredText:
-      "MyStadium umfasst die Stadien der Saison 2026-27: die 20 Erstligisten und die 22 Zweitligisten des spanischen Fußballs sowie die Top-Ligen Englands, Frankreichs, Deutschlands und Portugals. Insgesamt 116 Stadien.",
+      "MyStadium umfasst {{count}} Spielstätten aus {{sports}} Sportarten in {{leagues}} Ligen für die Saison 2026-27: Fußball, Basketball, Rugby, Sumo und American Football.",
     partners: "Partner",
     partnersText: "Xavier Solé (Partner) und Guillem Polinyà (Partner)",
     footer: "© 2025 MyStadium · Mit ❤️ für den Fußball gemacht",

@@ -25,6 +25,7 @@ export default {
     nw: "NW",
   },
   home: {
+    sport: "Sport",
     league: "League",
     team: "Team",
     chooseTeam: "— Choose a team —",
@@ -40,11 +41,6 @@ export default {
     spectators: "{{count}} spectators",
     distanceM: "{{count}} m from your position",
     distanceKm: "{{count}} km from your position",
-    leagueLabel: { primera: "First Division", segunda: "Second Division" },
-    leagueOption: {
-      espana1: "Spain · 1st Division",
-      espana2: "Spain · 2nd Division",
-    },
     countrySpain: "Spain",
   },
   location: {
@@ -62,12 +58,8 @@ export default {
     setupTitle: "Stadium Quiz",
     setupDesc:
       "We show you a stadium and you must guess which team plays there.\n\n{{count}} questions await you!",
-    division: "Division",
-    divisionOptions: {
-      primera: "First Division",
-      segunda: "Second Division",
-      all: "All divisions",
-    },
+    league: "League",
+    leagueOptions: { all: "All leagues" },
     start: "Start Quiz",
     abandon: "Quit",
     abandonMsg: "Are you sure? Your progress will be lost.",
@@ -108,9 +100,6 @@ export default {
     loading: "Loading your markers…",
     heroTitle: "Stadiums you have visited",
     completed: "{{percent}}% completed",
-    divisionPrimera: "⭐ First",
-    divisionSegunda: "🌟 Second",
-    divisionOption: { primera: "First Division", segunda: "Second Division" },
     cities: "Cities",
     totalCapacity: "Total capacity",
     oldest: "Oldest",
@@ -156,9 +145,9 @@ export default {
     howCompass: "How the compass works",
     howCompassText:
       "It uses your phone GPS to know your position and the magnetometer to detect where you are pointing. With both it calculates the exact bearing to the chosen stadium.\n\nLocation permission is required to work.",
-    stadiumsCovered: "Stadiums covered",
+    stadiumsCovered: "Venues covered",
     stadiumsCoveredText:
-      "MyStadium includes the 2026-27 season stadiums: the 20 First Division teams and the 22 Second Division teams of Spanish football, plus the top leagues of England, France, Germany and Portugal. 116 stadiums in total.",
+      "MyStadium includes {{count}} venues across {{sports}} sports and {{leagues}} leagues for the 2026-27 season: football, basketball, rugby, sumo and American football.",
     partners: "Partners",
     partnersText: "Xavier Solé (Partner) and Guillem Polinyà (Partner)",
     footer: "© 2025 MyStadium · Made with ❤️ for football",

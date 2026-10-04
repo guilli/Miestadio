@@ -33,8 +33,6 @@ export default {
     gettingLocation: "Obteniendo ubicación…",
     empty:
       "Selecciona una liga y un equipo\npara ver la brújula y los datos del estadio",
-    soonTitle: "{{sport}} próximamente",
-    soonText: "Los recintos de {{sport}} llegarán en una próxima versión.",
     directionTo: "Dirección al {{name}}",
     city: "Ciudad",
     capacity: "Aforo",
@@ -43,11 +41,6 @@ export default {
     spectators: "{{count}} espectadores",
     distanceM: "{{count}} m desde tu posición",
     distanceKm: "{{count}} km desde tu posición",
-    leagueLabel: { primera: "Primera División", segunda: "Segunda División" },
-    leagueOption: {
-      espana1: "España · 1ª División",
-      espana2: "España · 2ª División",
-    },
     countrySpain: "España",
   },
   location: {
@@ -65,12 +58,8 @@ export default {
     setupTitle: "Quiz de Estadios",
     setupDesc:
       "Te mostramos un estadio y debes adivinar qué equipo juega ahí.\n\n¡{{count}} preguntas te esperan!",
-    division: "División",
-    divisionOptions: {
-      primera: "Primera División",
-      segunda: "Segunda División",
-      all: "Todas las divisiones",
-    },
+    league: "Liga",
+    leagueOptions: { all: "Todas las ligas" },
     start: "Empezar Quiz",
     abandon: "Abandonar",
     abandonMsg: "¿Seguro? Se perderá el progreso.",
@@ -111,9 +100,6 @@ export default {
     loading: "Cargando tus marcadores…",
     heroTitle: "Campos que has visitado",
     completed: "{{percent}}% completado",
-    divisionPrimera: "⭐ Primera",
-    divisionSegunda: "🌟 Segunda",
-    divisionOption: { primera: "Primera División", segunda: "Segunda División" },
     cities: "Ciudades",
     totalCapacity: "Aforo acumulado",
     oldest: "Más antiguo",
@@ -159,9 +145,9 @@ export default {
     howCompass: "Cómo funciona la brújula",
     howCompassText:
       "Usa el GPS del móvil para conocer tu posición y el magnetómetro para detectar hacia dónde apuntas. Con ambos datos calcula el rumbo exacto hasta el estadio elegido.\n\nNecesita permiso de ubicación para funcionar.",
-    stadiumsCovered: "Estadios cubiertos",
+    stadiumsCovered: "Recintos cubiertos",
     stadiumsCoveredText:
-      "MyStadium incluye los estadios de la temporada 2026-27: los 20 equipos de Primera División y los 22 de Segunda División del fútbol español, además de las principales ligas de Inglaterra, Francia, Alemania y Portugal. 116 estadios en total.",
+      "MyStadium incluye {{count}} recintos de {{sports}} deportes y {{leagues}} ligas de la temporada 2026-27: fútbol, baloncesto, rugby, sumo y fútbol americano.",
     partners: "Partners",
     partnersText: "Xavier Solé (Partner) y Guillem Polinyà (Partner)",
     footer: "© 2025 MyStadium · Hecho con ❤️ para el fútbol",

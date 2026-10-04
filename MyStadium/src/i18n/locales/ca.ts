@@ -25,6 +25,7 @@ export default {
     nw: "NO",
   },
   home: {
+    sport: "Esport",
     league: "Lliga",
     team: "Equip",
     chooseTeam: "— Tria un equip —",
@@ -40,11 +41,6 @@ export default {
     spectators: "{{count}} espectadors",
     distanceM: "{{count}} m des de la teva posició",
     distanceKm: "{{count}} km des de la teva posició",
-    leagueLabel: { primera: "Primera Divisió", segunda: "Segona Divisió" },
-    leagueOption: {
-      espana1: "Espanya · 1a Divisió",
-      espana2: "Espanya · 2a Divisió",
-    },
     countrySpain: "Espanya",
   },
   location: {
@@ -62,12 +58,8 @@ export default {
     setupTitle: "Quiz d'Estadis",
     setupDesc:
       "Et mostrem un estadi i has d'endevinar quin equip hi juga.\n\nT'hi esperen {{count}} preguntes!",
-    division: "Divisió",
-    divisionOptions: {
-      primera: "Primera Divisió",
-      segunda: "Segona Divisió",
-      all: "Totes les divisions",
-    },
+    league: "Lliga",
+    leagueOptions: { all: "Totes les lligues" },
     start: "Començar Quiz",
     abandon: "Abandonar",
     abandonMsg: "Segur? Es perdrà el progrés.",
@@ -108,9 +100,6 @@ export default {
     loading: "Carregant els teus marcadors…",
     heroTitle: "Camps que has visitat",
     completed: "{{percent}}% completat",
-    divisionPrimera: "⭐ Primera",
-    divisionSegunda: "🌟 Segona",
-    divisionOption: { primera: "Primera Divisió", segunda: "Segona Divisió" },
     cities: "Ciutats",
     totalCapacity: "Aforament acumulat",
     oldest: "Més antic",
@@ -156,9 +145,9 @@ export default {
     howCompass: "Com funciona la brúixola",
     howCompassText:
       "Fes servir el GPS del mòbil per conèixer la teva posició i el magnetòmetre per detectar cap on apuntes. Amb les dues dades calcula el rumb exacte fins a l'estadi triat.\n\nNecessita permís d'ubicació per funcionar.",
-    stadiumsCovered: "Estadis coberts",
+    stadiumsCovered: "Recintes coberts",
     stadiumsCoveredText:
-      "MyStadium inclou els estadis de la temporada 2026-27: els 20 equips de Primera Divisió i els 22 de Segona Divisió del futbol espanyol, a més de les principals lligues d'Anglaterra, França, Alemanya i Portugal. 116 estadis en total.",
+      "MyStadium inclou {{count}} recintes de {{sports}} esports i {{leagues}} lligues de la temporada 2026-27: futbol, bàsquet, rugby, sumo i futbol americà.",
     partners: "Partners",
     partnersText: "Xavier Solé (Partner) i Guillem Polinyà (Partner)",
     footer: "© 2025 MyStadium · Fet amb ❤️ per al futbol",

@@ -3,8 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator
 import { Picker } from "@react-native-picker/picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-import { stadiums as allStadiums } from "../data/stadiums";
-import { SPORTS, SportLeague } from "../data/sports";
+import { SPORTS, SportLeague, getLeagueLabel, getLeagueVenues } from "../data/sports";
 import { SportId, StadiumWithDistance } from "../types";
 import useLocation from "../hooks/useLocation";
 import useMagnetometer from "../hooks/useMagnetometer";
@@ -23,37 +22,19 @@ export default function HomeScreen() {
   const [teamId, setTeamId] = useState<string>(PLACEHOLDER);
 
   const sport = useMemo(() => SPORTS.find(s => s.id === sportId) ?? SPORTS[0], [sportId]);
-  const isFootball = sport.id === "futbol";
   const currentLeague = useMemo<SportLeague>(
     () => sport.leagues.find(l => l.id === leagueId) ?? sport.leagues[0],
     [sport, leagueId],
   );
 
-  // Equipos disponibles para la liga elegida
-  const teams = useMemo<string[]>(() => {
-    if (isFootball) {
-      return allStadiums
-        .filter(s => s.country === currentLeague.country && s.division === currentLeague.division)
-        .map(s => s.teamName)
-        .sort((a, b) => a.localeCompare(b));
-    }
-    return currentLeague.teams ?? [];
-  }, [isFootball, currentLeague]);
-
-  // Estadios enriquecidos con distancia/rumbo solo para fútbol (único deporte con datos reales)
-  const filteredStadiums = useMemo<StadiumWithDistance[]>(() => {
-    if (!isFootball) return [];
-    const base = allStadiums.filter(
-      s => s.country === currentLeague.country && s.division === currentLeague.division,
-    );
-    return enrichStadiums(base).sort((a, b) => a.teamName.localeCompare(b.teamName));
-  }, [isFootball, currentLeague, enrichStadiums]);
+  // Recintos de la liga elegida, enriquecidos con distancia y rumbo
+  const filteredStadiums = useMemo<StadiumWithDistance[]>(
+    () => enrichStadiums(getLeagueVenues(currentLeague.id)),
+    [currentLeague, enrichStadiums],
+  );
 
   const stadium = useMemo<StadiumWithDistance | null>(
-    () =>
-      teamId === PLACEHOLDER
-        ? null
-        : filteredStadiums.find(s => s.teamName === teamId) ?? null,
+    () => filteredStadiums.find(s => s.id === teamId) ?? null,
     [teamId, filteredStadiums],
   );
 
@@ -124,8 +105,8 @@ export default function HomeScreen() {
               mode="dropdown"
             >
               <Picker.Item label={t("home.chooseTeam")} value={PLACEHOLDER} color="#999" style={styles.pickerItem} />
-              {teams.map(name => (
-                <Picker.Item key={name} label={name} value={name} style={styles.pickerItem} />
+              {filteredStadiums.map(s => (
+                <Picker.Item key={s.id} label={s.teamName} value={s.id} style={styles.pickerItem} />
               ))}
             </Picker>
           </View>
@@ -165,7 +146,7 @@ export default function HomeScreen() {
             <Text style={styles.cardTeam}>{stadium.teamName}</Text>
             <View style={styles.divider} />
             <Row icon="📍" label={t("home.city")} value={stadium.city} />
-            <Row icon="🏆" label={t("home.league")} value={t(`home.leagueLabel.${stadium.division.toLowerCase()}`)} />
+            <Row icon="🏆" label={t("home.league")} value={getLeagueLabel(stadium.leagueId)} />
             <Row icon="👥" label={t("home.capacity")} value={stadium.capacity.toLocaleString("es-ES")} />
             <Row icon="📅" label={t("home.year")} value={t("home.inaugurated", { year: stadium.yearBuilt })} />
             {stadium.distance != null && (
@@ -176,8 +157,7 @@ export default function HomeScreen() {
       ) : (
         <View style={styles.empty}>
           <Text style={styles.emptyIcon}>{sport.icon}</Text>
-          <Text style={styles.emptyText}>{t("home.soonTitle", { sport: sport.label })}</Text>
-          <Text style={styles.emptySub}>{t("home.soonText", { sport: sport.label })}</Text>
+          <Text style={styles.emptyText}>{t("home.empty")}</Text>
         </View>
       )}
     </View>

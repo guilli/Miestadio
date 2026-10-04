@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-nati
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import i18n, { SUPPORTED_LANGUAGES, getAppLanguage, setAppLanguage } from "../i18n";
+import { stadiums } from "../data/stadiums";
+import { SPORTS } from "../data/sports";
 
 const FEATURES: { icon: string; titleKey: string; descKey: string }[] = [
   { icon: "🧭", titleKey: "info.features.compass.title", descKey: "info.features.compass.desc" },
@@ -45,7 +47,13 @@ export default function InfoScreen() {
 
         <Text style={styles.sectionTitle}>{t("info.stadiumsCovered")}</Text>
         <View style={styles.infoBox}>
-          <Text style={styles.infoBoxText}>{t("info.stadiumsCoveredText")}</Text>
+          <Text style={styles.infoBoxText}>
+            {t("info.stadiumsCoveredText", {
+              count: stadiums.length,
+              sports: SPORTS.length,
+              leagues: SPORTS.reduce((n, s) => n + s.leagues.length, 0),
+            })}
+          </Text>
         </View>
 
         <Text style={styles.sectionTitle}>{t("info.partners")}</Text>

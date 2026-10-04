@@ -4,9 +4,13 @@ import { Picker } from "@react-native-picker/picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { stadiums as allStadiums } from "../data/stadiums";
-import { Stadium, Division } from "../types";
+import { SPORTS } from "../data/sports";
+import { Stadium } from "../types";
 
-type DivFilter = Division | "todas";
+const ALL_LEAGUES = "todas";
+const LEAGUES = SPORTS.flatMap(sport => sport.leagues.map(league => ({ sport, league })));
+
+type LeagueFilter = string;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -25,19 +29,19 @@ interface Question {
 
 const TOTAL = 20;
 
-function buildQuestions(div: DivFilter): Question[] {
-  const filtered = div === "todas" ? allStadiums : allStadiums.filter(s => s.division === div);
+function buildQuestions(leagueId: LeagueFilter): Question[] {
+  const filtered = leagueId === ALL_LEAGUES ? allStadiums : allStadiums.filter(s => s.leagueId === leagueId);
   const selected = shuffle(filtered).slice(0, TOTAL);
-  
+
   return selected.map(stadium => {
-    const others = filtered.filter(s => s.teamName !== stadium.teamName);
+    const others = filtered.filter(s => s.teamId !== stadium.teamId);
     const wrongOpts = shuffle(others).slice(0, 3).map(s => s.teamName);
     const options = shuffle([stadium.teamName, ...wrongOpts]);
-    
+
     return {
       stadium,
       options,
-      correct: stadium.teamName
+      correct: stadium.teamName,
     };
   });
 }
@@ -52,7 +56,7 @@ export default function QuizScreen(): React.JSX.Element | null {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const [gameState, setGameState] = useState<"setup" | "playing" | "finished">("setup");
-  const [division, setDivision] = useState<DivFilter>("Primera");
+  const [division, setDivision] = useState<LeagueFilter>(ALL_LEAGUES);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<string>("__none__");
@@ -61,6 +65,9 @@ export default function QuizScreen(): React.JSX.Element | null {
   const [wrongs, setWrongs] = useState<Wrong[]>([]);
 
   const current = questions[index];
+  /** Las ligas pequeñas no llegan a TOTAL, así que el total real es el que se ha generado. */
+  const total = questions.length;
+  const poolSize = division === ALL_LEAGUES ? allStadiums.length : allStadiums.filter(s => s.leagueId === division).length;
 
   const handleStart = useCallback(() => {
     const qs = buildQuestions(division);
@@ -89,14 +96,14 @@ export default function QuizScreen(): React.JSX.Element | null {
   }, [selected, current]);
 
   const handleNext = useCallback(() => {
-    if (index + 1 >= TOTAL) {
+    if (index + 1 >= total) {
       setGameState("finished");
     } else {
       setIndex(prev => prev + 1);
       setSelected("__none__");
       setAnswered(false);
     }
-  }, [index]);
+  }, [index, total]);
 
   const handleReset = useCallback(() => {
     setGameState("setup");
@@ -109,10 +116,10 @@ export default function QuizScreen(): React.JSX.Element | null {
   }, []);
 
   const handleShare = useCallback(() => {
-    const msg = `${t("quiz.shareTitle", { score, total: TOTAL })}\n\n${wrongs.length > 0 ? `${t("quiz.shareErrors")}\n${wrongs.map(w => t("quiz.shareWrongLine", { stadium: w.stadium, chosen: w.chosen, correct: w.correct })).join("\n")}` : t("quiz.sharePerfect")}`;
+    const msg = `${t("quiz.shareTitle", { score, total })}\n\n${wrongs.length > 0 ? `${t("quiz.shareErrors")}\n${wrongs.map(w => t("quiz.shareWrongLine", { stadium: w.stadium, chosen: w.chosen, correct: w.correct })).join("\n")}` : t("quiz.sharePerfect")}`;
     const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(msg)}`;
     Linking.openURL(whatsappUrl).catch(() => Share.share({ message: msg }));
-  }, [score, wrongs, t]);
+  }, [score, wrongs, t, total]);
 
   if (gameState === "setup") {
     return (
@@ -121,20 +128,21 @@ export default function QuizScreen(): React.JSX.Element | null {
           <View style={styles.setupCard}>
             <Text style={styles.setupTitle}>{t("quiz.setupTitle")}</Text>
             <Text style={styles.setupDesc}>
-              {t("quiz.setupDesc", { count: TOTAL })}
+              {t("quiz.setupDesc", { count: Math.min(TOTAL, poolSize) })}
             </Text>
             
-            <Text style={styles.divLabel}>{t("quiz.division")}</Text>
+            <Text style={styles.divLabel}>{t("quiz.league")}</Text>
             <View style={styles.pickerWrap}>
-              <Picker 
-                selectedValue={division} 
-                onValueChange={v => setDivision(v as DivFilter)} 
+              <Picker
+                selectedValue={division}
+                onValueChange={v => setDivision(v as LeagueFilter)}
                 style={styles.picker}
                 dropdownIconColor="#2E7D32"
               >
-                <Picker.Item label={t("quiz.divisionOptions.primera")} value="Primera" style={styles.pickerItem} />
-                <Picker.Item label={t("quiz.divisionOptions.segunda")} value="Segunda" style={styles.pickerItem} />
-                <Picker.Item label={t("quiz.divisionOptions.all")} value="todas" style={styles.pickerItem} />
+                <Picker.Item label={t("quiz.leagueOptions.all")} value={ALL_LEAGUES} style={styles.pickerItem} />
+                {LEAGUES.map(({ sport, league }) => (
+                  <Picker.Item key={league.id} label={`${sport.icon} ${league.label}`} value={league.id} style={styles.pickerItem} />
+                ))}
               </Picker>
             </View>
             
@@ -166,14 +174,14 @@ export default function QuizScreen(): React.JSX.Element | null {
           >
             <Text style={styles.exitTxt}>✕</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{t("quiz.questionNum", { current: index + 1, total: TOTAL })}</Text>
+          <Text style={styles.headerTitle}>{t("quiz.questionNum", { current: index + 1, total })}</Text>
           <Text style={styles.scoreTxt}>{score} ✓</Text>
         </View>
         
         <View style={styles.progBar}>
-          <View style={[styles.progFill, { width: `${(index / TOTAL) * 100}%` }]} />
+          <View style={[styles.progFill, { width: `${(index / total) * 100}%` }]} />
         </View>
-        <Text style={styles.progLabel}>{index + 1} / {TOTAL}</Text>
+        <Text style={styles.progLabel}>{index + 1} / {total}</Text>
         
         <ScrollView contentContainerStyle={[styles.playContent, { paddingBottom: insets.bottom + 40 }]}>
           <View style={styles.questionCard}>
@@ -221,7 +229,7 @@ export default function QuizScreen(): React.JSX.Element | null {
             </TouchableOpacity>
           ) : (
             <TouchableOpacity style={[styles.actionBtn, styles.actionBtnEnabled]} onPress={handleNext}>
-              <Text style={styles.actionTxt}>{index + 1 >= TOTAL ? t("quiz.seeResult") : t("quiz.next")}</Text>
+              <Text style={styles.actionTxt}>{index + 1 >= total ? t("quiz.seeResult") : t("quiz.next")}</Text>
             </TouchableOpacity>
           )}
         </ScrollView>
@@ -235,8 +243,8 @@ export default function QuizScreen(): React.JSX.Element | null {
         <ScrollView contentContainerStyle={[styles.finishedContent, { paddingBottom: insets.bottom + 40 }]}>
           <View style={styles.resultCard}>
             <Text style={styles.resultTitle}>{t("quiz.finishedTitle")}</Text>
-            <Text style={styles.resultScore}>{score} / {TOTAL}</Text>
-            <Text style={styles.resultPercent}>{t("quiz.percent", { percent: Math.round((score / TOTAL) * 100) })}</Text>
+            <Text style={styles.resultScore}>{score} / {total}</Text>
+            <Text style={styles.resultPercent}>{t("quiz.percent", { percent: Math.round((score / total) * 100) })}</Text>
             
             {wrongs.length > 0 && (
               <>

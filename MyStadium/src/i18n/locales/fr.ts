@@ -25,6 +25,7 @@ export default {
     nw: "NO",
   },
   home: {
+    sport: "Sport",
     league: "Ligue",
     team: "Équipe",
     chooseTeam: "— Choisissez une équipe —",
@@ -40,11 +41,6 @@ export default {
     spectators: "{{count}} spectateurs",
     distanceM: "{{count}} m de votre position",
     distanceKm: "{{count}} km de votre position",
-    leagueLabel: { primera: "Première Division", segunda: "Deuxième Division" },
-    leagueOption: {
-      espana1: "Espagne · 1re Division",
-      espana2: "Espagne · 2e Division",
-    },
     countrySpain: "Espagne",
   },
   location: {
@@ -62,12 +58,8 @@ export default {
     setupTitle: "Quiz des Stades",
     setupDesc:
       "Nous vous montrons un stade et vous devez deviner quelle équipe y joue.\n\n{{count}} questions vous attendent !",
-    division: "Division",
-    divisionOptions: {
-      primera: "Première Division",
-      segunda: "Deuxième Division",
-      all: "Toutes les divisions",
-    },
+    league: "Ligue",
+    leagueOptions: { all: "Toutes les ligues" },
     start: "Commencer le Quiz",
     abandon: "Quitter",
     abandonMsg: "Êtes-vous sûr ? Votre progression sera perdue.",
@@ -108,12 +100,6 @@ export default {
     loading: "Chargement de vos marques…",
     heroTitle: "Stades que vous avez visités",
     completed: "{{percent}} % complété",
-    divisionPrimera: "⭐ Première",
-    divisionSegunda: "🌟 Deuxième",
-    divisionOption: {
-      primera: "Première Division",
-      segunda: "Deuxième Division",
-    },
     cities: "Villes",
     totalCapacity: "Capacité cumulée",
     oldest: "Plus ancien",
@@ -159,9 +145,9 @@ export default {
     howCompass: "Comment fonctionne la boussole",
     howCompassText:
       "Elle utilise le GPS du téléphone pour connaître votre position et le magnétomètre pour détecter où vous pointez. Grâce à ces deux données, elle calcule le cap exact vers le stade choisi.\n\nL'autorisation de localisation est nécessaire.",
-    stadiumsCovered: "Stades couverts",
+    stadiumsCovered: "Salles couvertes",
     stadiumsCoveredText:
-      "MyStadium inclut les stades de la saison 2026-27 : les 20 équipes de Première Division et les 22 de Deuxième Division du football espagnol, ainsi que les meilleures ligues d'Angleterre, de France, d'Allemagne et du Portugal. 116 stades au total.",
+      "MyStadium inclut {{count}} salles de {{sports}} sports et {{leagues}} ligues pour la saison 2026-27 : football, basket, rugby, sumo et football américain.",
     partners: "Partners",
     partnersText: "Xavier Solé (Partner) et Guillem Polinyà (Partner)",
     footer: "© 2025 MyStadium · Fait avec ❤️ pour le football",

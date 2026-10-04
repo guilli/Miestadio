@@ -4,7 +4,8 @@ import { Picker } from "@react-native-picker/picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { stadiums as allStadiums } from "../data/stadiums";
-import { Division, Stadium } from "../types";
+import { getLeaguesByCountry } from "../data/sports";
+import { Country, Stadium } from "../types";
 import { loadVisited, saveVisited } from "../storage/visitedStorage";
 
 const COUNTRIES = Array.from(new Set(allStadiums.map(s => s.country)));
@@ -15,11 +16,6 @@ const FILTERS: { id: Filter; labelKey: string }[] = [
   { id: "todos", labelKey: "visited.filterAll" },
   { id: "visitados", labelKey: "visited.filterVisited" },
   { id: "pendientes", labelKey: "visited.filterPending" },
-];
-
-const DIVISIONS: { id: Division; labelKey: string }[] = [
-  { id: "Primera", labelKey: "visited.divisionOption.primera" },
-  { id: "Segunda", labelKey: "visited.divisionOption.segunda" },
 ];
 
 function ProgressBar({ pct, height = 10, track = "#E8F5E9", fill = "#2E7D32" }: { pct: number; height?: number; track?: string; fill?: string }) {
@@ -45,7 +41,7 @@ export default function VisitedScreen() {
   const { t } = useTranslation();
   const [visited, setVisited] = useState<string[] | null>(null);
   const [filter, setFilter] = useState<Filter>("todos");
-  const [country, setCountry] = useState<string>(COUNTRIES[0] ?? "España");
+  const [country, setCountry] = useState<Country>(COUNTRIES[0] ?? "España");
 
   useEffect(() => {
     let alive = true;
@@ -92,10 +88,10 @@ export default function VisitedScreen() {
     const count = visitedStadiums.length;
     const pct = total > 0 ? (count / total) * 100 : 0;
 
-    const byDivision = DIVISIONS.map(d => {
-      const all = allStadiums.filter(s => s.division === d.id);
+    const byLeague = getLeaguesByCountry(country).map(({ league }) => {
+      const all = allStadiums.filter(s => s.leagueId === league.id);
       const done = all.filter(s => visitedSet.has(s.id)).length;
-      return { ...d, done, total: all.length, pct: all.length > 0 ? (done / all.length) * 100 : 0 };
+      return { ...league, done, total: all.length, pct: all.length > 0 ? (done / all.length) * 100 : 0 };
     });
 
     const allCities = new Set(allStadiums.map(s => s.city));
@@ -111,7 +107,7 @@ export default function VisitedScreen() {
       count,
       total,
       pct,
-      byDivision,
+      byLeague,
       citiesVisited: visitedCities.size,
       citiesTotal: allCities.size,
       capacity,
@@ -119,7 +115,7 @@ export default function VisitedScreen() {
       newest,
       visitedStadiums,
     };
-  }, [visitedSet]);
+  }, [visitedSet, country]);
 
   const matchesFilter = useCallback((s: Stadium) => {
     if (filter === "visitados") return visitedSet.has(s.id);
@@ -136,7 +132,7 @@ export default function VisitedScreen() {
       t("visited.shareTitle"),
       ``,
       t("visited.shareCount", { count: stats.count, total: stats.total, percent: stats.pct.toFixed(0) }),
-      ...stats.byDivision.map(d => `${d.id === "Primera" ? "⭐" : "🌟"} ${d.id}: ${d.done}/${d.total}`),
+      ...stats.byLeague.map(l => `${l.label}: ${l.done}/${l.total}`),
       t("visited.shareCities", { count: stats.citiesVisited, total: stats.citiesTotal }),
       t("visited.shareCapacity", { count: stats.capacity.toLocaleString("es-ES") }),
       t("visited.shareOldest", { year: stats.oldest ?? "—" }),
@@ -168,7 +164,7 @@ export default function VisitedScreen() {
       <View style={styles.countryCard}>
         <Text style={styles.countryLabel}>{t("visited.country")}</Text>
         <View style={styles.pickerBox}>
-          <Picker selectedValue={country} onValueChange={v => setCountry(v as string)} style={styles.picker} dropdownIconColor="#2E7D32">
+          <Picker selectedValue={country} onValueChange={v => setCountry(v as Country)} style={styles.picker} dropdownIconColor="#2E7D32">
             {COUNTRIES.map(c => <Picker.Item key={c} label={c} value={c} style={styles.pickerItem} />)}
           </Picker>
         </View>
@@ -186,13 +182,13 @@ export default function VisitedScreen() {
         </View>
 
         <View style={styles.divisionBlock}>
-          {stats.byDivision.map(d => (
-            <View key={d.id} style={styles.divisionRow}>
+          {stats.byLeague.map(l => (
+            <View key={l.id} style={styles.divisionRow}>
               <View style={styles.divisionLabels}>
-                <Text style={styles.divisionName}>{d.id === "Primera" ? t("visited.divisionPrimera") : t("visited.divisionSegunda")}</Text>
-                <Text style={styles.divisionCount}>{d.done}/{d.total}</Text>
+                <Text style={styles.divisionName} numberOfLines={1}>{l.label}</Text>
+                <Text style={styles.divisionCount}>{l.done}/{l.total}</Text>
               </View>
-              <ProgressBar pct={d.pct} height={7} track="rgba(255,255,255,0.2)" fill="#A5D6A7" />
+              <ProgressBar pct={l.pct} height={7} track="rgba(255,255,255,0.2)" fill="#A5D6A7" />
             </View>
           ))}
         </View>
@@ -234,17 +230,16 @@ export default function VisitedScreen() {
         </TouchableOpacity>
       </View>
 
-      {DIVISIONS.map(d => {
-        const byCountry = allStadiums.filter(s => s.country === country);
-        const list = byCountry.filter(s => s.division === d.id && matchesFilter(s));
-        const done = byCountry.filter(s => s.division === d.id && visitedSet.has(s.id)).length;
-        const total = byCountry.filter(s => s.division === d.id).length;
+      {stats.byLeague.map(l => {
+        const byLeague = allStadiums.filter(s => s.leagueId === l.id);
+        const list = byLeague.filter(matchesFilter);
+        const done = byLeague.filter(s => visitedSet.has(s.id)).length;
         if (list.length === 0) return null;
         return (
-          <View key={d.id}>
+          <View key={l.id}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>{t(d.labelKey)}</Text>
-              <Text style={styles.sectionCount}>{done}/{total}</Text>
+              <Text style={styles.sectionTitle}>{l.label}</Text>
+              <Text style={styles.sectionCount}>{done}/{byLeague.length}</Text>
             </View>
             {list.map(s => {
               const marked = visitedSet.has(s.id);

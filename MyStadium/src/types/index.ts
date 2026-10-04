@@ -1,5 +1,14 @@
 export type Division = "Primera" | "Segunda";
-export type Country = "España" | "Inglaterra" | "Francia" | "Alemania" | "Portugal";
+
+export type Country =
+  | "España"
+  | "Inglaterra"
+  | "Francia"
+  | "Alemania"
+  | "Portugal"
+  | "Japón"
+  | "Estados Unidos"
+  | "Canadá";
 
 export type SportId = "futbol" | "baloncesto" | "rugby" | "sumo" | "futbolamericano";
 
@@ -13,11 +22,15 @@ export interface Stadium {
   name: string;
   teamId: string;
   teamName: string;
+  sportId: SportId;
+  /** Liga a la que pertenece, ver SportLeague.id en data/sports. */
+  leagueId: string;
   city: string;
-  country: string;
+  country: Country;
   capacity: number;
   yearBuilt: number;
-  division: Division;
+  /** Solo el fútbol divide en Primera/Segunda. */
+  division?: Division;
   latitude: number;
   longitude: number;
 }

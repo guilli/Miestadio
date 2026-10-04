@@ -1,0 +1,44 @@
+import { Stadium } from "../../types";
+
+/**
+ * Recintos de la NBA. Aforo y año de inauguración del recinto, con las
+ * coordenadas reales para que la brújula apunte a la sede.
+ */
+export const NBA: Stadium[] = [
+  // ─── DIVISIÓN ATLÁNTICA ───────────────────────────────────────────────────
+  { id: "td-garden", name: "TD Garden", teamId: "boston-celtics", teamName: "Boston Celtics", city: "Boston", country: "Estados Unidos", capacity: 19580, yearBuilt: 1995, sportId: "baloncesto", leagueId: "nba", latitude: 42.3601, longitude: -71.0589 },
+  { id: "barclays-center", name: "Barclays Center", teamId: "brooklyn-nets", teamName: "Brooklyn Nets", city: "Nueva York", country: "Estados Unidos", capacity: 17732, yearBuilt: 2012, sportId: "baloncesto", leagueId: "nba", latitude: 40.6826, longitude: -73.9762 },
+  { id: "msg", name: "Madison Square Garden", teamId: "new-york-knicks", teamName: "New York Knicks", city: "Nueva York", country: "Estados Unidos", capacity: 19812, yearBuilt: 1968, sportId: "baloncesto", leagueId: "nba", latitude: 40.7505, longitude: -73.9934 },
+  { id: "xfinity-mobile-arena", name: "Xfinity Mobile Arena", teamId: "philadelphia-76ers", teamName: "Philadelphia 76ers", city: "Filadelfia", country: "Estados Unidos", capacity: 20007, yearBuilt: 1996, sportId: "baloncesto", leagueId: "nba", latitude: 39.9513, longitude: -75.1588 },
+  { id: "scotiabank-arena", name: "Scotiabank Arena", teamId: "toronto-raptors", teamName: "Toronto Raptors", city: "Toronto", country: "Canadá", capacity: 19800, yearBuilt: 1999, sportId: "baloncesto", leagueId: "nba", latitude: 43.6433, longitude: -79.3792 },
+  // ─── DIVISIÓN CENTRAL ────────────────────────────────────────────────────
+  { id: "united-center", name: "United Center", teamId: "chicago-bulls", teamName: "Chicago Bulls", city: "Chicago", country: "Estados Unidos", capacity: 20917, yearBuilt: 1994, sportId: "baloncesto", leagueId: "nba", latitude: 41.8787, longitude: -87.6223 },
+  { id: "rocket-arena", name: "Rocket Arena", teamId: "cleveland-cavaliers", teamName: "Cleveland Cavaliers", city: "Cleveland", country: "Estados Unidos", capacity: 19432, yearBuilt: 1994, sportId: "baloncesto", leagueId: "nba", latitude: 41.5247, longitude: -81.6996 },
+  { id: "little-caesars-arena", name: "Little Caesars Arena", teamId: "detroit-pistons", teamName: "Detroit Pistons", city: "Detroit", country: "Estados Unidos", capacity: 20332, yearBuilt: 2017, sportId: "baloncesto", leagueId: "nba", latitude: 42.3414, longitude: -83.0457 },
+  { id: "gainbridge-fieldhouse", name: "Gainbridge Fieldhouse", teamId: "indiana-pacers", teamName: "Indiana Pacers", city: "Indianápolis", country: "Estados Unidos", capacity: 17923, yearBuilt: 1999, sportId: "baloncesto", leagueId: "nba", latitude: 39.7608, longitude: -86.1639 },
+  { id: "fiserv-forum", name: "Fiserv Forum", teamId: "milwaukee-bucks", teamName: "Milwaukee Bucks", city: "Milwaukee", country: "Estados Unidos", capacity: 17341, yearBuilt: 2018, sportId: "baloncesto", leagueId: "nba", latitude: 43.0451, longitude: -87.9493 },
+  // ─── DIVISIÓN SURESTE ─────────────────────────────────────────────────────
+  { id: "state-farm-arena", name: "State Farm Arena", teamId: "atlanta-hawks", teamName: "Atlanta Hawks", city: "Atlanta", country: "Estados Unidos", capacity: 17044, yearBuilt: 1999, sportId: "baloncesto", leagueId: "nba", latitude: 33.7554, longitude: -84.4008 },
+  { id: "spectrum-center", name: "Spectrum Center", teamId: "charlotte-hornets", teamName: "Charlotte Hornets", city: "Charlotte", country: "Estados Unidos", capacity: 19077, yearBuilt: 2005, sportId: "baloncesto", leagueId: "nba", latitude: 35.2250, longitude: -80.8529 },
+  { id: "kaseya-center", name: "Kaseya Center", teamId: "miami-heat", teamName: "Miami Heat", city: "Miami", country: "Estados Unidos", capacity: 19600, yearBuilt: 1999, sportId: "baloncesto", leagueId: "nba", latitude: 25.7810, longitude: -80.2020 },
+  { id: "kia-center", name: "Kia Center", teamId: "orlando-magic", teamName: "Orlando Magic", city: "Orlando", country: "Estados Unidos", capacity: 18500, yearBuilt: 2010, sportId: "baloncesto", leagueId: "nba", latitude: 28.4230, longitude: -81.3790 },
+  { id: "capital-one-arena", name: "Capital One Arena", teamId: "washington-wizards", teamName: "Washington Wizards", city: "Washington", country: "Estados Unidos", capacity: 20333, yearBuilt: 1997, sportId: "baloncesto", leagueId: "nba", latitude: 38.8985, longitude: -77.0215 },
+  // ─── DIVISIÓN NOROESTE ────────────────────────────────────────────────────
+  { id: "ball-arena", name: "Ball Arena", teamId: "denver-nuggets", teamName: "Denver Nuggets", city: "Denver", country: "Estados Unidos", capacity: 19520, yearBuilt: 1999, sportId: "baloncesto", leagueId: "nba", latitude: 39.7487, longitude: -105.0077 },
+  { id: "target-center", name: "Target Center", teamId: "minnesota-timberwolves", teamName: "Minnesota Timberwolves", city: "Mineápolis", country: "Estados Unidos", capacity: 18024, yearBuilt: 1990, sportId: "baloncesto", leagueId: "nba", latitude: 44.9778, longitude: -93.2650 },
+  { id: "paycom-center", name: "Paycom Center", teamId: "oklahoma-city-thunder", teamName: "Oklahoma City Thunder", city: "Oklahoma City", country: "Estados Unidos", capacity: 18203, yearBuilt: 2005, sportId: "baloncesto", leagueId: "nba", latitude: 35.4676, longitude: -97.5164 },
+  { id: "moda-center", name: "Moda Center", teamId: "portland-trail-blazers", teamName: "Portland Trail Blazers", city: "Portland", country: "Estados Unidos", capacity: 19411, yearBuilt: 1995, sportId: "baloncesto", leagueId: "nba", latitude: 45.5166, longitude: -122.6813 },
+  { id: "delta-center", name: "Delta Center", teamId: "utah-jazz", teamName: "Utah Jazz", city: "Salt Lake City", country: "Estados Unidos", capacity: 18306, yearBuilt: 1991, sportId: "baloncesto", leagueId: "nba", latitude: 40.7618, longitude: -111.9741 },
+  // ─── DIVISIÓN PACÍFICO ────────────────────────────────────────────────────
+  { id: "chase-center", name: "Chase Center", teamId: "golden-state-warriors", teamName: "Golden State Warriors", city: "San Francisco", country: "Estados Unidos", capacity: 18064, yearBuilt: 2019, sportId: "baloncesto", leagueId: "nba", latitude: 37.7680, longitude: -122.3877 },
+  { id: "intuit-dome", name: "Intuit Dome", teamId: "los-angeles-clippers", teamName: "Los Angeles Clippers", city: "Inglewood", country: "Estados Unidos", capacity: 18000, yearBuilt: 2024, sportId: "baloncesto", leagueId: "nba", latitude: 33.9531, longitude: -118.3390 },
+  { id: "crypto-com-arena", name: "Crypto.com Arena", teamId: "los-angeles-lakers", teamName: "Los Angeles Lakers", city: "Los Ángeles", country: "Estados Unidos", capacity: 18997, yearBuilt: 1999, sportId: "baloncesto", leagueId: "nba", latitude: 34.0430, longitude: -118.2673 },
+  { id: "mortgage-matchup-center", name: "Mortgage Matchup Center", teamId: "phoenix-suns", teamName: "Phoenix Suns", city: "Phoenix", country: "Estados Unidos", capacity: 17071, yearBuilt: 1992, sportId: "baloncesto", leagueId: "nba", latitude: 33.5276, longitude: -112.2621 },
+  { id: "golden-1-center", name: "Golden 1 Center", teamId: "sacramento-kings", teamName: "Sacramento Kings", city: "Sacramento", country: "Estados Unidos", capacity: 17608, yearBuilt: 2016, sportId: "baloncesto", leagueId: "nba", latitude: 38.5804, longitude: -121.4937 },
+  // ─── DIVISIÓN SUROESTE ────────────────────────────────────────────────────
+  { id: "american-airlines-center", name: "American Airlines Center", teamId: "dallas-mavericks", teamName: "Dallas Mavericks", city: "Dallas", country: "Estados Unidos", capacity: 19200, yearBuilt: 2001, sportId: "baloncesto", leagueId: "nba", latitude: 32.7473, longitude: -97.0945 },
+  { id: "toyota-center", name: "Toyota Center", teamId: "houston-rockets", teamName: "Houston Rockets", city: "Houston", country: "Estados Unidos", capacity: 18055, yearBuilt: 2003, sportId: "baloncesto", leagueId: "nba", latitude: 29.7573, longitude: -95.3556 },
+  { id: "fedexforum", name: "FedExForum", teamId: "memphis-grizzlies", teamName: "Memphis Grizzlies", city: "Memphis", country: "Estados Unidos", capacity: 18400, yearBuilt: 2004, sportId: "baloncesto", leagueId: "nba", latitude: 35.1398, longitude: -90.1838 },
+  { id: "smoothie-king-center", name: "Smoothie King Center", teamId: "new-orleans-pelicans", teamName: "New Orleans Pelicans", city: "Nueva Orleans", country: "Estados Unidos", capacity: 16867, yearBuilt: 1999, sportId: "baloncesto", leagueId: "nba", latitude: 29.9430, longitude: -90.0852 },
+  { id: "frost-bank-center", name: "Frost Bank Center", teamId: "san-antonio-spurs", teamName: "San Antonio Spurs", city: "San Antonio", country: "Estados Unidos", capacity: 18418, yearBuilt: 2003, sportId: "baloncesto", leagueId: "nba", latitude: 29.4647, longitude: -98.4838 },
+];
